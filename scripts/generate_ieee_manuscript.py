@@ -34,7 +34,7 @@ def generate_manuscript(output_dir):
 \title{Optical Memory Interconnect (OMI): A Constraint-Bounded Nanophotonic Architecture for 3D Flash Memory with Spatially Distributed Vertical Feedthroughs, High-Mobility Micro-Channel Sensing, and Sub-100~fJ/bit Thermodynamic Scaling}
 
 \author{Deepanshu Bhardwaj
-\thanks{Manuscript received September 14, 2026. The author is with the Advanced Optical Computing and Storage Architecture Group. Patent Application No.: 202611052791 (Patent Pending).}}
+\thanks{Manuscript received September 14, 2026. The author is with the Advanced Optical Computing and Storage Architecture Group (e-mail: dbofficialking@gmail.com).}}
 
 \markboth{}{}%
 

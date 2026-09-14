@@ -235,15 +235,9 @@ Compiled deliverables will be available in `manuscript/`:
 
 ---
 
-## Intellectual Property & Patent Notice
+## License
 
-The fundamental architecture, physical implementations, and circuit techniques described herein are subject to pending intellectual property protections:
-- **Title**: *Optical Memory Interconnect (OMI) Heterogeneous 3D Flash Architecture and Receiverless Optoelectronic Interface*
-- **Application Number**: **202611052791**
-- **Filing Date**: September 14, 2026
-- **Status**: Patent Pending
-
-For non-commercial research, academic exploration, and peer review, this work is licensed under the **PolyForm Noncommercial License 1.0.0** (see [`LICENSE.MD`](LICENSE.MD)). For commercial inquiries or foundry partnerships, please contact the author.
+This architecture, co-simulation suite, and manuscript sources are licensed under the **PolyForm Noncommercial License 1.0.0** (see [`LICENSE.MD`](LICENSE.MD)) for non-commercial research, academic exploration, and peer review. For commercial licensing or foundry partnerships, please contact the author.
 
 ---
 
@@ -257,7 +251,7 @@ If you utilize this architecture, simulation models, or data in your research, p
   title     = {Optical Memory Interconnect (OMI): Ultra-Low-Power (50.0~fJ/bit) 25.6~TB/s Direct-Optical 3D Flash Architecture for Frontier Artificial Intelligence},
   journal   = {IEEE Transactions on Electron Devices},
   year      = {2026},
-  note      = {Under Review, Patent App. 202611052791}
+  note      = {Under Review}
 }
 
 @techreport{bhardwaj2026omi_sim_report,
