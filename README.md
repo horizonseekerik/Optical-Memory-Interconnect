@@ -8,8 +8,7 @@
 [![License: PolyForm Noncommercial](https://img.shields.io/badge/License-PolyForm_Noncommercial_1.0.0-lightgrey.svg)](LICENSE.MD)
 
 > **Author**: Deepanshu Bhardwaj  
-> **Affiliation**: Advanced Optical Computing and Storage Architecture Group  
-> **Patent Status**: Patent Application No. 202611052791 (Patent Pending)
+> **Affiliation**: Advanced Optical Computing and Storage Architecture Group
 
 ---
 
