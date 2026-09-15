@@ -136,6 +136,56 @@ To ensure absolute industrial and academic integrity, this codebase explicitly d
 
 ---
 
+## Physical Layout & Multi-Project Wafer (MPW) Tape-Out Model (GDSII)
+
+To advance OMI from numerical co-simulation (**TRL 4**) to foundry tape-out readiness (**TRL 5/6**), this repository provides the complete, procedural **GDSII physical mask layout** for the **8-waveguide transceiver architecture** implemented on a standard **$2.0\,\text{mm} \times 2.0\,\text{mm}$ ($4.0\,\text{mm}^2$) Multi-Project Wafer (MPW) tile**.
+
+The layout is parametrically generated via Python using `klayout.db` and is fully compliant with leading silicon photonics foundry design rule manuals (DRMs).
+
+<p align="center">
+  <img src="layout/previews/omi_layout_datasheet.png" width="96%" alt="OMI 8-Channel GDSII Physical Layout Datasheet">
+  <br>
+  <em>Figure 7: Comprehensive 8-Channel OMI GDSII Physical Mask Datasheet. (a) Full 2.0 mm x 2.0 mm reticle floorplan with dual seal rings and corner fiducials; (b) West CW laser input and 3-stage 1:8 cascaded MMI splitter tree; (c) 8-channel Thin-Film LiTaO3 (TFLT) electro-optic Pockels modulators with RF CPW probe pads; (d) Centum-Node Through-Die Via (TDV) constellation with 8.0 um copper pillars and CMOS StrongARM sense links; (e) Dense 1.5 um pitch 8-waveguide bus with deep trench isolation (DTI) air voids and SACM Ge/Si APD receiver array; (f) East Co-Packaged Optics (CPO) fiber ribbon edge couplers at 127 um MT ferrule pitch; (g) South reticle foundry diagnostic test structures (MMI balance test, TFLT RF VNA test, 2.50 cm cutback loss spiral, TDV 4-wire Kelvin chain, DTI optical isolation test pair, and sub-micron overlay Vernier scales).</em>
+</p>
+
+### Physical Mask Layer Map (DRC Standard)
+
+| Layer / Datatype | Layer Name | Physical Material / Function | Design Rules / Target Dimensions |
+| :---: | :--- | :--- | :--- |
+| **1 / 0** | `WG_CORE` | $\text{Si}_3\text{N}_4$ Waveguide Core | Single-mode $W = 800\,\text{nm}$, $H = 400\,\text{nm}$, $n = 1.996$ |
+| **2 / 0** | `WG_SLAB` | Waveguide Slab / Partial Etch | Rib slab, MMI tapers, and facet support transitions |
+| **3 / 0** | `TFLT_CORE` | Thin-Film $\text{LiTaO}_3$ Bonded Film | Pockels electro-optic phase shifters ($300\,\text{nm}$, $r_{33} = 30.5\,\text{pm/V}$) |
+| **4 / 0** | `DTI_ETCH` | Deep Trench Isolation (Air Voids) | Width $= 350\,\text{nm}$, Depth $= 2.0\,\mu\text{m}$, inter-lane isolation $>45\,\text{dB}$ |
+| **5 / 0** | `ACTIVE_PD` | $\text{Ge}$ Absorption & SACM Mesa | $W = 1.2\,\mu\text{m}$, $L = 14.0\,\mu\text{m}$, separate multiplication layer |
+| **6 / 0** | `TDV_VIA` | Through-Die Vias (Copper Pillars) | Diameter $\varnothing = 8.0\,\mu\text{m}$, Centum-Node $200\,\mu\text{m}$ pitch grid |
+| **7 / 0** | `TDV_PAD` | TDV Landing / Capture Pads | $14.0\,\mu\text{m} \times 14.0\,\mu\text{m}$ Cu capture pads with stress relief |
+| **8 / 0** | `CONTACT` | Silicide Local Contact Vias | Ohmic contacts to photodetector cathode/anode |
+| **9 / 0** | `METAL1` | Metal 1 Interconnect (Local Sense) | CMOS StrongARM latch wiring & bitline routes ($t_{90} = 2.22\,\text{ns}$) |
+| **10 / 0** | `METAL2_RF` | Metal 2 (High-Speed RF CPW & DC) | GSG Modulator electrodes ($W = 6.0\,\mu\text{m}$, $G = 4.5\,\mu\text{m}$, $50\,\Omega$ CPW) |
+| **11 / 0** | `PAD_OPEN` | Passivation Openings | $80\,\mu\text{m} \times 80\,\mu\text{m}$ and $50\,\mu\text{m} \times 50\,\mu\text{m}$ RF/DC probe windows |
+| **12 / 0** | `HEAT_PILLAR`| Copper Thermal Highway Pillars | Direct conjugate conduction interface to top copper heat spreader |
+| **63 / 0** | `TEXT_LABEL`| Micro & Macro Text Annotations | Rasterized 5x7 polygon labels and native GDS text elements |
+| **99 / 0** | `CHIP_BORDER`| Reticle Boundary & Scribe Line | $2000.0\,\mu\text{m} \times 2000.0\,\mu\text{m}$ ($2.0 \times 2.0\,\text{mm}^2$ tile) |
+
+### 8 Integrated Functional Subsystems
+
+1. **West Optical Injection Port**: Spot-size converter (SSC) with adiabatic inverse taper ($180\,\text{nm} \to 800\,\text{nm}$ over $150\,\mu\text{m}$) and fiber alignment groove for external $1550\,\text{nm}$ CW laser delivery. Includes on-chip optical loopback ports for standalone fiber-to-chip coupling calibration.
+2. **1:8 Cascaded MMI Splitter Tree**: 3-stage binary tree of $1 \times 2$ multimode interference splitters ($W_{\text{MMI}} = 6.0\,\mu\text{m}$, $L_{\text{MMI}} = 28.5\,\mu\text{m}$, excess loss $0.14\,\text{dB/stage}$) utilizing cosine S-bends to distribute carrier power equally across 8 optical lanes.
+3. **8-Channel Thin-Film $\text{LiTaO}_3$ Pockels Modulators**: 8 push-pull Mach-Zehnder electro-optic modulators with bonded $300\,\text{nm}$ single-crystal $\text{LiTaO}_3$ ($r_{33} = 30.5\,\text{pm/V}$) and $50\,\Omega$ traveling-wave Coplanar Waveguide (CPW) electrodes routed to wafer-level RF Ground-Signal-Ground (GSG) probe pads for $100\,\text{GHz}$ / $200\,\text{GHz}$ VNA characterization.
+4. **Centum-Node TDV Constellation Interface**: Vertical feedthrough matrix with $8.0\,\mu\text{m}$ circular copper Through-Die Vias, $14.0\,\mu\text{m}$ capture pads, and low-parasitic Metal 1 routes feeding word-line drive voltages directly to the modulator drivers.
+5. **Dense 8-Waveguide Bus with DTI Air-Voids**: 8 single-mode waveguides routed at an ultra-dense $1.5\,\mu\text{m}$ pitch (total bus width $11.3\,\mu\text{m}$), flanked by etched Deep Trench Isolation (DTI) air-void slots ($350\,\text{nm}$) providing $>45\,\text{dB}$ inter-lane optical isolation.
+6. **8-Channel SACM Ge/Si APD Receiver Array**: Waveguide butt-coupled $\text{Ge}$ absorption mesas ($1.2\,\mu\text{m} \times 14.0\,\mu\text{m}$) and silicon multiplication regions feeding directly into CMOS StrongARM regenerative sense amplifiers without analog transimpedance amplifiers.
+7. **East Co-Packaged Optics (CPO) Edge Coupler Array**: 8-channel adiabatic inverse taper edge couplers expanded to standard $127.0\,\mu\text{m}$ pitch, matching commercial MT ferrule ribbon fiber arrays for rack-scale optical fabric reach.
+8. **South Reticle Diagnostic & PDK Test Structures**: Comprehensive process development modules including:
+   - **Test 1**: Standalone $1 \times 2$ MMI test block with dual loopback ports.
+   - **Test 2**: Standalone $\text{LiTaO}_3$ phase modulator with dedicated GSG probe pads for $V_\pi \cdot L$ and $S_{21}$ RF bandwidth testing.
+   - **Test 3**: Concentric cutback waveguide loss spiral ($L = 2.50\,\text{cm}$ optical path length) for precision propagation loss extraction.
+   - **Test 4**: 10-via TDV daisy chain with 4-wire Kelvin probe pads ($I+, I-, V+, V-$) measuring sub-$15\,\text{m}\Omega$ contact resistance.
+   - **Test 5**: DTI optical crosstalk test pair comparing parallel waveguides with and without air-void trenches.
+   - **Test 6**: Dual-axis lithographic Vernier overlay calipers ($10\,\text{nm}$ resolution) and sub-micron resolution comb targets ($200\,\text{nm}$ to $1000\,\text{nm}$).
+
+---
+
 ## Primary Publications & Deliverables
 
 This repository contains the complete publication-grade manuscript suite:
@@ -169,6 +219,19 @@ Optical-Memory-Interconnect/
 │       ├── ieee_page-01.png ... ieee_page-15.png
 │       └── sim_report_page-1.png ... sim_report_page-9.png
 │
+├── layout/                                     # Foundry-ready GDSII mask layout & layer definitions
+│   ├── OMI_8CH_TRANSCEIVER_2x2MM.gds           # 2.0 mm x 2.0 mm 8-channel GDSII mask stream (14 layers)
+│   ├── omi_layers.lyp                          # KLayout layer properties & color palette
+│   └── previews/                               # Multi-scale inspection renders (PNG)
+│       ├── omi_layout_datasheet.png            # High-resolution multi-panel layout datasheet
+│       ├── omi_chip_top_overview.png           # Full 2.0 mm x 2.0 mm chip floorplan overview
+│       ├── omi_zoom_mmi_tree.png               # Zoom: Laser SSC & 1:8 MMI distribution tree
+│       ├── omi_zoom_tflt_modulators.png        # Zoom: 8-channel Thin-Film LiTaO3 modulators & RF CPW
+│       ├── omi_zoom_tdv_constellation.png      # Zoom: Centum-Node TDV copper pillars & capture pads
+│       ├── omi_zoom_dti_bus_apd.png            # Zoom: Dense 1.5 um DTI bus & SACM Ge/Si APD array
+│       ├── omi_zoom_cpo_couplers.png           # Zoom: East CPO fiber ribbon edge couplers (127 um pitch)
+│       └── omi_zoom_test_structures.png        # Zoom: South reticle PDK diagnostic & test structures
+│
 ├── plots/                                      # Publication simulation dashboards (PNG, 300 DPI)
 │   ├── integrated_system_architecture.png      # Fig. 1: Top-level co-simulation dashboard
 │   ├── mmi_1_to_1024_tree_loss.png             # Fig. 2: 1:1024 MMI binary distribution tree loss
@@ -178,10 +241,13 @@ Optical-Memory-Interconnect/
 │   ├── omi_vs_hbm4_power_analysis.png          # Fig. 6: Thermodynamic scaling vs. JEDEC HBM4
 │   └── ... (additional individual tier diagnostics)
 │
-├── scripts/                                    # Automation and document compilers
+├── scripts/                                    # Automation, document compilers & layout generators
 │   ├── build_documents.py                      # Master build pipeline (runs pdflatex & pdftoppm)
 │   ├── generate_ieee_manuscript.py             # Generator script for theoretical IEEE paper
 │   ├── generate_simulation_report.py           # Generator script for empirical simulation report
+│   ├── generate_omi_gds.py                     # Procedural 2.0x2.0 mm GDSII mask generator (klayout.db)
+│   ├── render_gds_previews.py                  # High-resolution multi-scale GDS preview renderer
+│   ├── generate_layout_figure.py               # Composite publication datasheet figure generator
 │   └── run_all_simulations.py                  # Master batch runner for all simulation solvers
 │
 ├── simulations/                                # Numerical solvers and physics models
@@ -212,7 +278,7 @@ Optical-Memory-Interconnect/
 ## Reproduction & Build Instructions
 
 ### Prerequisites
-- **Python 3.10+** with `numpy`, `scipy`, `matplotlib`, `pypdf`.
+- **Python 3.10+** with `numpy`, `scipy`, `matplotlib`, `pypdf`, `klayout`, `Pillow`.
 - **MEEP FDTD** (optional, required only for regenerating full 3D Maxwell FDTD electromagnetic meshes).
 - **MiKTeX / TeX Live** with `pdflatex` and `pdftoppm`.
 
@@ -232,6 +298,23 @@ python scripts/build_documents.py
 Compiled deliverables will be available in `manuscript/`:
 - `IEEE_TRANSACTIONS_OMI_MANUSCRIPT.pdf` (15 pages)
 - `OMI_SIMULATION_REPORT_AND_BENCHMARKS.pdf` (9 pages)
+
+### 3. Generate GDSII Physical Layout & Renders
+To generate the procedural 14-layer physical GDSII stream file and render multi-scale inspection previews:
+```bash
+# Generate 2.0 mm x 2.0 mm GDSII layout and KLayout layer palette (.lyp)
+python scripts/generate_omi_gds.py
+
+# Render multi-scale sub-cell inspection PNGs
+python scripts/render_gds_previews.py
+
+# Build composite publication layout datasheet
+python scripts/generate_layout_figure.py
+```
+Compiled deliverables will be available in `layout/`:
+- `layout/OMI_8CH_TRANSCEIVER_2x2MM.gds` (Foundry-ready GDSII file)
+- `layout/omi_layers.lyp` (KLayout layer styling properties)
+- `layout/previews/omi_layout_datasheet.png` (Comprehensive 7-panel datasheet)
 
 ---
 
