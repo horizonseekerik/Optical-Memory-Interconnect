@@ -196,8 +196,8 @@ This repository contains the complete publication-grade manuscript suite:
    - Includes 5 vector-rendered TikZ architectural schematics.
 
 2. **Multi-Physics Simulation Report & Benchmarks** ([`manuscript/OMI_SIMULATION_REPORT_AND_BENCHMARKS.pdf`](manuscript/OMI_SIMULATION_REPORT_AND_BENCHMARKS.pdf)):
-   - **9 Pages**, concise, balanced, publication-grade empirical reference manual.
-   - Houses the 6 core physical simulation dashboards enlarged to two-column width (`0.88\textwidth`), paired with in-depth analytical text, governing formulas, itemized power breakdown (Table I & Table II), master 19-point sign-off verification matrix (Table III), and system-level LLaMA-3 70B inference profiling (Table IV).
+   - **11 Pages**, concise, balanced, publication-grade empirical reference manual.
+   - Houses the 7 core physical simulation dashboards and foundry tape-out datasheets enlarged to two-column width (`0.88\textwidth`), paired with in-depth analytical text, governing formulas, itemized power breakdown (Table I & Table II), master 19-point sign-off verification matrix (Table III), system-level LLaMA-3 70B inference profiling (Table IV), and 14-layer MPW physical mask layout map (Table V).
 
 ---
 
@@ -212,12 +212,12 @@ Optical-Memory-Interconnect/
 ├── manuscript/                                 # LaTeX sources and compiled publication PDFs
 │   ├── IEEE_TRANSACTIONS_OMI_MANUSCRIPT.tex    # Pure theoretical IEEE paper (15 pages, 102 equations)
 │   ├── IEEE_TRANSACTIONS_OMI_MANUSCRIPT.pdf    # Compiled PDF of IEEE Transactions manuscript
-│   ├── OMI_SIMULATION_REPORT_AND_BENCHMARKS.tex# Multi-physics simulation & sign-off report (9 pages)
+│   ├── OMI_SIMULATION_REPORT_AND_BENCHMARKS.tex# Multi-physics simulation & sign-off report (11 pages)
 │   ├── OMI_SIMULATION_REPORT_AND_BENCHMARKS.pdf# Compiled PDF of Simulation Report
 │   ├── OPTICAL_MEMORY_INTERCONNECT_3D_FLASH.md # Authoritative technical architectural specification
 │   └── previews/                               # High-resolution PNG preview renders of each page
 │       ├── ieee_page-01.png ... ieee_page-15.png
-│       └── sim_report_page-1.png ... sim_report_page-9.png
+│       └── sim_report_page-01.png ... sim_report_page-11.png
 │
 ├── layout/                                     # Foundry-ready GDSII mask layout & layer definitions
 │   ├── OMI_8CH_TRANSCEIVER_2x2MM.gds           # 2.0 mm x 2.0 mm 8-channel GDSII mask stream (14 layers)
@@ -297,7 +297,7 @@ python scripts/build_documents.py
 ```
 Compiled deliverables will be available in `manuscript/`:
 - `IEEE_TRANSACTIONS_OMI_MANUSCRIPT.pdf` (15 pages)
-- `OMI_SIMULATION_REPORT_AND_BENCHMARKS.pdf` (9 pages)
+- `OMI_SIMULATION_REPORT_AND_BENCHMARKS.pdf` (11 pages)
 
 ### 3. Generate GDSII Physical Layout & Renders
 To generate the procedural 14-layer physical GDSII stream file and render multi-scale inspection previews:
