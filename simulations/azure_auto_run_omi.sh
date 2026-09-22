@@ -59,10 +59,13 @@ az vm run-command invoke \
     git clone https://github.com/horizonseekerik/Optical-Memory-Interconnect.git /tmp/omi_repo
     cd /tmp/omi_repo
 
-    echo "[*] Running 8 GB Dual-Tier Endurance Simulation..."
+    echo "[*] Running 8 GB Dual-Tier Analytical Endurance Engine..."
     python3 simulations/simulate_8gb_endurance_rotator.py
 
-    echo "[*] Simulation completed successfully inside VM."
+    echo "[*] Running Option B: Discrete Cell-by-Cell Physical Monte Carlo Simulation..."
+    python3 simulations/monte_carlo_discrete_cell_wear.py --cells 7560000 --batches 200 --batch_size 250000
+
+    echo "[*] All OMI simulations completed successfully inside VM."
   ' --output json
 
 # Step 4: Stop and Deallocate VM (Stops compute billing immediately)

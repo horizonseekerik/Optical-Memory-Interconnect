@@ -1,0 +1,12 @@
+{
+  "simulation_type": "Direct Discrete Cell-by-Cell Monte Carlo (Option B)",
+  "physical_cells_simulated": 756000,
+  "total_hsiao_words": 10500,
+  "spare_words_limit": 525,
+  "first_cell_puncture_overwrite": 0.0,
+  "first_bad_word_overwrite": 0.0,
+  "spare_exhaustion_overwrite": null,
+  "total_overwrites_simulated": 3.306878306878307,
+  "elapsed_seconds": 0.38387393951416016,
+  "plot_path": "C:\\Users\\hp\\Desktop\\Optical interconnect\\plots\\monte_carlo_discrete_cell_wear.png"
+}
