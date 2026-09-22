@@ -1,12 +1,12 @@
 {
-  "simulation_type": "Direct Discrete Cell-by-Cell Monte Carlo (Option B)",
+  "simulation_mode": "Autonomous Run-Until-Real-Failure Monte Carlo",
   "physical_cells_simulated": 756000,
   "total_hsiao_words": 10500,
-  "spare_words_limit": 525,
-  "first_cell_puncture_overwrite": 0.0,
-  "first_bad_word_overwrite": 0.0,
-  "spare_exhaustion_overwrite": null,
-  "total_overwrites_simulated": 3.306878306878307,
-  "elapsed_seconds": 0.38387393951416016,
+  "spare_words_pool_limit": 525,
+  "first_cell_puncture_overwrite": 5000.0,
+  "first_bad_word_overwrite": 56500.0,
+  "terminal_spare_exhaustion_overwrite": 275500.0,
+  "total_terabytes_written_tbw": 2204.0,
+  "elapsed_seconds": 5.4088709354400635,
   "plot_path": "C:\\Users\\hp\\Desktop\\Optical interconnect\\plots\\monte_carlo_discrete_cell_wear.png"
 }
