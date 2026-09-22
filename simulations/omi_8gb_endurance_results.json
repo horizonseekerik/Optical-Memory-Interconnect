@@ -1,0 +1,18 @@
+{
+  "architecture": "8 GB Optical Memory Interconnect (OMI)",
+  "user_capacity_gb": 8.0,
+  "total_physical_cells": 75600000000.0,
+  "hsiao_words_count": 1000000000.0,
+  "spare_words_pool_count": 50000000.0,
+  "voronoi_micro_zones": 100,
+  "clamped_temperature_c": 41.2,
+  "hot_temperature_c": 85.0,
+  "thermal_longevity_boost": 4.856,
+  "tier1_raw_cell_first_failure_50pct_hot_overwrites": 0.3859398517700648,
+  "tier1_raw_cell_first_failure_50pct_omi_overwrites": 5.045252892937636,
+  "tier2_subsystem_spare_exhaustion_50pct_hot_overwrites": 19065.57239331023,
+  "tier2_subsystem_spare_exhaustion_50pct_omi_overwrites": 249237.37165699288,
+  "endurance_formula_overwrites": "249,237 full 8 GB device writes (1,993.9 TB Total Bytes Written)",
+  "plot_path": "C:\\Users\\hp\\Desktop\\Optical interconnect\\plots\\omi_8gb_endurance_wear_rotator.png",
+  "elapsed_seconds": 2.884232997894287
+}
