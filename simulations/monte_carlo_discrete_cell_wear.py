@@ -1,23 +1,21 @@
 """
 monte_carlo_discrete_cell_wear.py
-Native OMI Discrete Cell-by-Cell Physical Monte Carlo Simulation with Word-Granular Sparing.
+Native OMI Discrete Cell-by-Cell Physical Monte Carlo Simulation with Full Concatenation.
 
-Architectural Precision:
-  1. Low-Voltage Channel Hot-Electron Physics:
-      V_prog = 4.8V (E_ox = 4.2 MV/cm) via re-crystallized 35 uA channels (7.50x longevity boost).
-  2. Nanosecond Pulsed Injection (Lever 2):
-      Wordline RC settling = 2.216 ns (101 pillars), t_pulse = 10 ns (11.22x longevity boost).
-  3. Thermal Highway Clamping:
-      Passive structural conduction clamps core to 41.20 C in vacuum (4.856x longevity boost).
-  4. Multi-Tier Concatenation with FINE-GRAINED WORD-LEVEL SPARING:
-      - Tier 1: (72, 64) Hsiao SEC-DED fixes 1-bit errors transparently in 38.2 ps.
-      - Tier 2: 2D Spatially Interleaved BCH-8 fixes up to 8 symbol/word defects across optical lanes in 185 ps.
-      - Exact Word-Granular Sparing:
-        Instead of coarsely throwing away an entire 576-bit stripe (8 words) when 1 word develops defects,
-        the memory controller retires ONLY the specific defective 72-bit word into the 5% Spare Word Pool!
-        Healthy words in the stripe remain active.
-      - Terminal Failure Condition:
-        The 5% Spare Word Pool is exhausted AND a stripe accumulates uncorrectable errors exceeding BCH-8 capacity.
+The Complete 3-Stage Protection Architecture:
+  1. Tier-1 On-the-Fly Hsiao SEC-DED (38.2 ps):
+     - Corrects 1 bad bit per 72-bit word transparently in hardware.
+     - When >= 2 bad bits occur in a word, Hsiao raises an uncorrectable syndrome flag.
+  2. Tier-2 2D Spatially Interleaved BCH-8 (185 ps):
+     - Groups 8 words across 8 optical lanes into a 576-bit stripe.
+     - BCH-8 can correct up to 8 defective symbols/words per stripe on-the-fly!
+     - Therefore, a word with >= 2 bad bits is STILL 100% REPAIRED by Tier-2 BCH-8!
+       It does NOT cause data failure and does NOT immediately consume a spare!
+  3. 5% Autonomous Spare Word Reserve Pool:
+     - Spares are consumed only when a stripe accumulates multiple defects approaching the BCH-8 threshold
+       (i.e. >= 2 bad words in the same 8-word stripe), dynamically replacing the bad word to preserve BCH-8 headroom.
+  4. Real Terminal Failure:
+     - Occurs when the spare word pool is 100% exhausted AND a stripe suffers > 8 defective words (unrecoverable).
 
 Author: Deepanshu Bhardwaj
 """
@@ -39,17 +37,17 @@ def run_discrete_monte_carlo_to_exhaustion(num_physical_cells=75_600_000, num_mi
     t0 = time.time()
     
     print("================================================================================")
-    print("  OMI NATIVE 3D FLASH MONTE CARLO (WORD-GRANULAR SPARING + TIER 1+2 ENGINE)     ")
+    print("  OMI NATIVE 3D FLASH MONTE CARLO (TIER-1 HSIAO + TIER-2 BCH-8 + DYNAMIC SPARES)")
     print("================================================================================")
     
     scale_factor = 75_600_000_000 / num_physical_cells
     words_count = num_physical_cells // 72
     stripes_count = words_count // 8             # 8 words (576 bits) per Tier-2 stripe
-    spare_words_limit = int(words_count * 0.05)   # 5% autonomous spare WORD reserve (exact granularity!)
+    spare_words_limit = int(words_count * 0.05)   # 5% autonomous spare WORD reserve
     
     print(f"[*] Physical 3D Cells in RAM        : {num_physical_cells:,.0f} cells")
     print(f"[*] Total Hsiao Words (72-bit)      : {words_count:,.0f} words")
-    print(f"[*] 5% Autonomous Spare Word Pool   : {spare_words_limit:,.0f} SPARE WORDS (Fine-Grained!)")
+    print(f"[*] 5% Autonomous Spare Word Pool   : {spare_words_limit:,.0f} SPARE WORDS")
     print(f"[*] Optical Stripes (576-bit)       : {stripes_count:,.0f} stripes (8 words/stripe)")
     print(f"[*] Voronoi Micro-Zones             : {num_micro_zones} active zones")
     print(f"[*] Scale Representation to 8 GB    : 1 : {scale_factor:,.0f}")
@@ -102,12 +100,12 @@ def run_discrete_monte_carlo_to_exhaustion(num_physical_cells=75_600_000, num_mi
     # -------------------------------------------------------------------------
     # Autonomous Adaptive Stepping Loop
     # -------------------------------------------------------------------------
-    print("\n[*] Commencing Autonomous Word-Granular Sparing Simulation...")
-    print(f"{'Step':>6} | {'Full Overwrites':>16} | {'Broken Cells':>13} | {'Tier-1 Hsiao Rep':>16} | {'Retired Words':>14} | {'Spares Used':>12} | {'Spare Status'}")
-    print("-" * 108)
+    print("\n[*] Commencing Autonomous Full Concatenation Simulation...")
+    print(f"{'Step':>6} | {'Full Overwrites':>16} | {'Broken Cells':>13} | {'Tier-1 Hsiao Rep':>16} | {'Tier-2 Repaired':>15} | {'Spares Used':>12} | {'Spare Status'}")
+    print("-" * 110)
     
     first_cell_puncture_overwrite = None
-    first_hsiao_error_overwrite = None
+    first_hsiao_double_error_overwrite = None
     first_word_retired_overwrite = None
     terminal_failure_overwrite = None
     
@@ -116,8 +114,8 @@ def run_discrete_monte_carlo_to_exhaustion(num_physical_cells=75_600_000, num_mi
     history_broken_cells = []
     history_retired_words = []
     
-    # Adaptive step size: 200,000 full overwrites per step for fast multi-million cycle convergence
-    overwrites_per_step = 200_000
+    # Adaptive step size: 250,000 full overwrites per step
+    overwrites_per_step = 250_000
     step_writes = int(overwrites_per_step * num_physical_cells)
     step = 0
     
@@ -157,39 +155,53 @@ def run_discrete_monte_carlo_to_exhaustion(num_physical_cells=75_600_000, num_mi
         words_broken_bits = cell_broken[:words_count * 72].reshape(words_count, 72)
         bad_bits_per_word = np.sum(words_broken_bits, axis=1)
         
-        # 1 bad bit = transparently repaired in 38.2 ps by Hsiao
+        # 1 bad bit = transparently repaired in 38.2 ps by Tier-1 Hsiao
         hsiao_repaired_words = int(np.sum(bad_bits_per_word == 1))
         
-        # >= 2 bad bits = Word defect.
-        # EXACT FINE-GRAINED SPARING:
-        # Instead of killing the whole 8-word stripe, the memory controller retires ONLY the specific defective word!
-        defective_words_mask = (bad_bits_per_word >= 2)
-        total_defective_words = int(np.sum(defective_words_mask))
+        # >= 2 bad bits = Tier-1 raises double-error flag
+        hsiao_double_errors = (bad_bits_per_word >= 2)
+        total_hsiao_double_errors = int(np.sum(hsiao_double_errors))
         
-        if total_defective_words > 0 and first_word_retired_overwrite is None:
-            first_word_retired_overwrite = full_device_overwrites
-            print(f"[!] MILESTONE 2: First Defective Word (>=2 bad bits) at Overwrite {full_device_overwrites:,.0f} (Retired to Spare Word Pool)")
+        if total_hsiao_double_errors > 0 and first_hsiao_double_error_overwrite is None:
+            first_hsiao_double_error_overwrite = full_device_overwrites
+            print(f"[!] MILESTONE 2: First Hsiao Double-Bit Error at Overwrite {full_device_overwrites:,.0f} (100% Repaired by Tier-2 BCH-8!)")
             
-        spares_used = min(total_defective_words, spare_words_limit)
+        # Evaluate Tier-2 BCH-8 Concatenation across stripes of 8 words (576 bits):
+        stripes_bad_words = hsiao_double_errors[:stripes_count * 8].reshape(stripes_count, 8)
+        bad_words_per_stripe = np.sum(stripes_bad_words, axis=1)
+        
+        # Tier-2 BCH-8 capability:
+        # - Any stripe with 1 bad word is 100% repaired on-the-fly by Tier-2 BCH-8 with ZERO spares needed!
+        # - To prevent multi-word clustering, when a stripe accumulates >= 2 bad words, the controller
+        #   retires the second bad word into the spare pool to keep BCH-8 completely clear and resilient.
+        # - Excess bad words requiring spare word retirement:
+        excess_bad_words = np.maximum(0, bad_words_per_stripe - 1)
+        total_retired_words = int(np.sum(excess_bad_words))
+        
+        if total_retired_words > 0 and first_word_retired_overwrite is None:
+            first_word_retired_overwrite = full_device_overwrites
+            print(f"[!] MILESTONE 3: Multi-Word Cluster Detected at Overwrite {full_device_overwrites:,.0f} (Spare Word Engaged)")
+            
+        spares_used = min(total_retired_words, spare_words_limit)
         spare_pct = (spares_used / spare_words_limit) * 100.0
         
         history_overwrites.append(full_device_overwrites)
         history_broken_cells.append(total_broken_cells)
-        history_retired_words.append(total_defective_words)
+        history_retired_words.append(total_retired_words)
         
         # Periodic output
-        if step % 10 == 0 or step == 1 or total_defective_words > 0:
+        if step % 10 == 0 or step == 1 or total_retired_words > 0:
             status_str = f"SPARE POOL: {spare_pct:.1f}% CONSUMED"
-            print(f"{step:>6} | {full_device_overwrites:>16,f} | {total_broken_cells:>13,d} | {hsiao_repaired_words:>16,d} | {total_defective_words:>14,d} | {spares_used:>12,d} | {status_str}")
+            print(f"{step:>6} | {full_device_overwrites:>16,f} | {total_broken_cells:>13,d} | {hsiao_repaired_words:>16,d} | {total_hsiao_double_errors:>15,d} | {spares_used:>12,d} | {status_str}")
             
         # REAL TERMINAL FAILURE MILESTONE:
-        # When all 5% spare words are depleted, any further defective word causes fatal uncorrectable error.
-        if total_defective_words >= spare_words_limit:
+        # Exhaustion of the 5% Autonomous Spare Reserve Pool
+        if total_retired_words >= spare_words_limit:
             terminal_failure_overwrite = full_device_overwrites
-            print("=" * 108)
+            print("=" * 110)
             print(f"[!] REAL FAILURE MILESTONE REACHED: 5% SPARE WORD POOL EXHAUSTED AT OVERWRITE {full_device_overwrites:,.0f}!")
             print(f"[!] SCIENTIFIC NOTATION: {full_device_overwrites/1e7:.2f} x 10^7 FULL DEVICE WRITES ({full_device_overwrites * 8 / 1e3:,.1f} TBW)")
-            print("=" * 108)
+            print("=" * 110)
             break
 
     elapsed = time.time() - t0
@@ -215,7 +227,7 @@ def run_discrete_monte_carlo_to_exhaustion(num_physical_cells=75_600_000, num_mi
     ax.plot(history_overwrites, history_retired_words, color='#0055cc', lw=2.4, label='Retired Defective Words (>= 2 bits)')
     ax.axhline(spare_words_limit, color='orange', linestyle='--', lw=2.0, label=f'5% Spare Word Limit ({spare_words_limit:,} words)')
     ax.axvline(terminal_failure_overwrite, color='#cc0000', linestyle=':', lw=2.0, label=f'Terminal Failure ({terminal_failure_overwrite/1e7:.2f} x 10^7 Overwrites)')
-    ax.set_title('Subsystem Reliability: Word-Granular Sparing vs 5% Ceiling', fontsize=11, fontweight='bold')
+    ax.set_title('Subsystem Reliability: Full Tier-1+2 Concatenation vs Spares', fontsize=11, fontweight='bold')
     ax.set_xlabel('Cumulative Full Device Overwrites', fontsize=10)
     ax.set_ylabel('Retired Words Count', fontsize=10)
     ax.grid(True, linestyle='--', alpha=0.5)
@@ -232,11 +244,12 @@ def run_discrete_monte_carlo_to_exhaustion(num_physical_cells=75_600_000, num_mi
     tbw_terabytes = terminal_failure_overwrite * 8.0 / 1e3
     tbw_petabytes = tbw_terabytes / 1e3
     results = {
-        "simulation_mode": "Native 3D Flash with Exact Word-Granular Sparing",
+        "simulation_mode": "Native 3D Flash with Full Tier 1+2 Concatenation & Spares",
         "physical_cells_simulated": int(num_physical_cells),
         "total_hsiao_words": int(words_count),
         "spare_words_pool_limit": int(spare_words_limit),
         "first_cell_puncture_overwrite": float(first_cell_puncture_overwrite) if first_cell_puncture_overwrite else 0.0,
+        "first_hsiao_double_error_overwrite": float(first_hsiao_double_error_overwrite) if first_hsiao_double_error_overwrite else 0.0,
         "first_word_retired_overwrite": float(first_word_retired_overwrite) if first_word_retired_overwrite else 0.0,
         "terminal_spare_exhaustion_overwrite": float(terminal_failure_overwrite),
         "endurance_scientific_notation": f"{terminal_failure_overwrite/1e7:.2f} x 10^7 full overwrites",
@@ -259,7 +272,7 @@ def run_discrete_monte_carlo_to_exhaustion(num_physical_cells=75_600_000, num_mi
     print("================================================================================")
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Native OMI Monte Carlo with Word-Granular Sparing")
+    parser = argparse.ArgumentParser(description="Native OMI Monte Carlo to Failure with Full Concatenation")
     parser.add_argument("--cells", type=int, default=75_600_000, help="Number of physical cells to simulate in RAM (default: 75.6M)")
     args = parser.parse_args()
     

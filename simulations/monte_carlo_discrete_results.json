@@ -1,14 +1,15 @@
 {
-  "simulation_mode": "Native 3D Flash with Exact Word-Granular Sparing",
+  "simulation_mode": "Native 3D Flash with Full Tier 1+2 Concatenation & Spares",
   "physical_cells_simulated": 756000,
   "total_hsiao_words": 10500,
   "spare_words_pool_limit": 525,
-  "first_cell_puncture_overwrite": 400000.0,
-  "first_word_retired_overwrite": 4600000.0,
-  "terminal_spare_exhaustion_overwrite": 23200000.0,
-  "endurance_scientific_notation": "2.32 x 10^7 full overwrites",
-  "total_terabytes_written_tbw": 185600.0,
-  "total_petabytes_written_pbw": 185.6,
-  "elapsed_seconds": 0.7142362594604492,
+  "first_cell_puncture_overwrite": 500000.0,
+  "first_hsiao_double_error_overwrite": 4000000.0,
+  "first_word_retired_overwrite": 10500000.0,
+  "terminal_spare_exhaustion_overwrite": 32000000.0,
+  "endurance_scientific_notation": "3.20 x 10^7 full overwrites",
+  "total_terabytes_written_tbw": 256000.0,
+  "total_petabytes_written_pbw": 256.0,
+  "elapsed_seconds": 0.8005189895629883,
   "plot_path": "C:\\Users\\hp\\Desktop\\Optical interconnect\\plots\\monte_carlo_discrete_cell_wear.png"
 }
