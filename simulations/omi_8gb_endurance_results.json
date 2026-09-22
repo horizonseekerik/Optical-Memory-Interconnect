@@ -8,11 +8,12 @@
   "clamped_temperature_c": 41.2,
   "hot_temperature_c": 85.0,
   "thermal_longevity_boost": 4.856,
-  "tier1_raw_cell_first_failure_50pct_hot_overwrites": 0.3859398517700648,
-  "tier1_raw_cell_first_failure_50pct_omi_overwrites": 5.045252892937636,
-  "tier2_subsystem_spare_exhaustion_50pct_hot_overwrites": 19065.57239331023,
-  "tier2_subsystem_spare_exhaustion_50pct_omi_overwrites": 249237.37165699288,
-  "endurance_formula_overwrites": "249,237 full 8 GB device writes (1,993.9 TB Total Bytes Written)",
+  "level1_raw_cell_puncture_50pct_omi": 5.045252892937636,
+  "level2_hsiao_first_bad_word_50pct_omi": 1874.089438535979,
+  "level3_spares_exhaustion_without_bch8_omi": 249237.37165699288,
+  "level4_full_omi_concatenated_endurance_overwrites": 802766.9073494711,
+  "total_terabytes_written_tbw": 6422.135258795769,
+  "total_petabytes_written_pbw": 6.422135258795769,
   "plot_path": "C:\\Users\\hp\\Desktop\\Optical interconnect\\plots\\omi_8gb_endurance_wear_rotator.png",
-  "elapsed_seconds": 2.884232997894287
+  "elapsed_seconds": 2.200770616531372
 }
