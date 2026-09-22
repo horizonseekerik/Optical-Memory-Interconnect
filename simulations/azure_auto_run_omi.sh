@@ -13,7 +13,8 @@ set -euo pipefail
 RESOURCE_GROUP="rg-omi-simulation"
 LOCATION="centralindia"
 VM_NAME="vm-omi-sim-8gb"
-VM_SIZE="Standard_B1s"  # Free-tier eligible 1 vCPU, 1 GiB RAM
+# Defaults to 4 vCPUs, scalable to large RAM (e.g. Standard_D4s_v5 or Standard_E4s_v5)
+VM_SIZE="${AZURE_VM_SIZE:-Standard_D4s_v5}"
 IMAGE="Ubuntu2204"
 ADMIN_USER="azureuser"
 GITHUB_REPO="https://github.com/horizonseekerik/Optical-Memory-Interconnect.git"
@@ -63,7 +64,8 @@ az vm run-command invoke \
     python3 simulations/simulate_8gb_endurance_rotator.py
 
     echo "[*] Running Option B: Discrete Cell-by-Cell Physical Monte Carlo Simulation..."
-    python3 simulations/monte_carlo_discrete_cell_wear.py --cells 7560000 --batches 200 --batch_size 250000
+    echo "[*] Harnessing 4 vCPUs and High Memory for 75,600,000 discrete cells..."
+    python3 simulations/monte_carlo_discrete_cell_wear.py --cells 75600000 --batches 500 --batch_size 1000000
 
     echo "[*] All OMI simulations completed successfully inside VM."
   ' --output json
