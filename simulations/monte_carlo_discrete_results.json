@@ -1,12 +1,16 @@
 {
-  "simulation_mode": "Autonomous Run-Until-Real-Failure Monte Carlo",
+  "simulation_mode": "Native 3D Flash (Pulsed 2.22ns WL + Tier 1+2 Concatenation)",
   "physical_cells_simulated": 756000,
   "total_hsiao_words": 10500,
-  "spare_words_pool_limit": 525,
-  "first_cell_puncture_overwrite": 5000.0,
-  "first_bad_word_overwrite": 56500.0,
-  "terminal_spare_exhaustion_overwrite": 275500.0,
-  "total_terabytes_written_tbw": 2204.0,
-  "elapsed_seconds": 5.4088709354400635,
+  "total_bch8_stripes": 1312,
+  "spare_stripes_limit": 65,
+  "first_cell_puncture_overwrite": 50000.0,
+  "first_hsiao_error_overwrite": 575000.0,
+  "first_tier2_stripe_fail_overwrite": 2000000.0,
+  "terminal_spare_exhaustion_overwrite": 3900000.0,
+  "endurance_scientific_notation": "0.39 x 10^7 full overwrites",
+  "total_terabytes_written_tbw": 31200.0,
+  "total_petabytes_written_pbw": 31.2,
+  "elapsed_seconds": 0.8535871505737305,
   "plot_path": "C:\\Users\\hp\\Desktop\\Optical interconnect\\plots\\monte_carlo_discrete_cell_wear.png"
 }
