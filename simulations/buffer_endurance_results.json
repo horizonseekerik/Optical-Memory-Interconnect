@@ -1,0 +1,57 @@
+[
+  {
+    "label": "16x16 TDV (5% Baseline Reserve)",
+    "pillars": 256,
+    "spare_ratio": 0.05,
+    "spare_words_limit": 524,
+    "terminal_overwrites": 46035000.0,
+    "tbw_petabytes": 368.28,
+    "first_puncture": 750000.0,
+    "first_double_error": 7500000.0,
+    "first_word_retired": 16000000.0
+  },
+  {
+    "label": "16x16 TDV (10% Over-Provisioning)",
+    "pillars": 256,
+    "spare_ratio": 0.10,
+    "spare_words_limit": 1049,
+    "terminal_overwrites": 53185000.0,
+    "tbw_petabytes": 425.48,
+    "first_puncture": 750000.0,
+    "first_double_error": 7500000.0,
+    "first_word_retired": 16000000.0
+  },
+  {
+    "label": "16x16 TDV (15% Over-Provisioning)",
+    "pillars": 256,
+    "spare_ratio": 0.15,
+    "spare_words_limit": 1574,
+    "terminal_overwrites": 58550000.0,
+    "tbw_petabytes": 468.40,
+    "first_puncture": 750000.0,
+    "first_double_error": 7500000.0,
+    "first_word_retired": 16000000.0
+  },
+  {
+    "label": "16x16 TDV (20% Over-Provisioning)",
+    "pillars": 256,
+    "spare_ratio": 0.20,
+    "spare_words_limit": 2099,
+    "terminal_overwrites": 63365000.0,
+    "tbw_petabytes": 506.92,
+    "first_puncture": 750000.0,
+    "first_double_error": 7500000.0,
+    "first_word_retired": 16000000.0
+  },
+  {
+    "label": "16x16 TDV (25% Industrial SD Buffer)",
+    "pillars": 256,
+    "spare_ratio": 0.25,
+    "spare_words_limit": 2624,
+    "terminal_overwrites": 67455000.0,
+    "tbw_petabytes": 539.64,
+    "first_puncture": 750000.0,
+    "first_double_error": 7500000.0,
+    "first_word_retired": 16000000.0
+  }
+]

@@ -8,7 +8,8 @@
 [![License: PolyForm Noncommercial](https://img.shields.io/badge/License-PolyForm_Noncommercial_1.0.0-lightgrey.svg)](LICENSE.MD)
 
 > **Author**: Deepanshu Bhardwaj  
-> **Affiliation**: Advanced Optical Computing and Storage Architecture Group
+> **Affiliation**: Independent Researcher  
+> **Contact**: deepanshubhardwaj4115@gmail.com
 
 ---
 
@@ -233,13 +234,15 @@ Optical-Memory-Interconnect/
 │       └── omi_zoom_test_structures.png        # Zoom: South reticle PDK diagnostic & test structures
 │
 ├── plots/                                      # Publication simulation dashboards (PNG, 300 DPI)
-│   ├── integrated_system_architecture.png      # Fig. 1: Top-level co-simulation dashboard
-│   ├── mmi_1_to_1024_tree_loss.png             # Fig. 2: 1:1024 MMI binary distribution tree loss
-│   ├── flash_rc_transient_comparison.png       # Fig. 3: 2D distributed RC transient settling
-│   ├── flash_3d_thermal_superhighway.png       # Fig. 4: 3D conjugate thermal conduction PDE
-│   ├── timing_jitter_eye_decomposition.png     # Fig. 5: Dual-Dirac timing jitter & eye closure
-│   ├── omi_vs_hbm4_power_analysis.png          # Fig. 6: Thermodynamic scaling vs. JEDEC HBM4
-│   └── ... (additional individual tier diagnostics)
+│   ├── integrated_system_architecture.png      # Top-level co-simulation dashboard
+│   ├── link_architecture_overview.png         # Optical link architecture overview
+│   ├── physics_and_endurance_overview.png      # Physics and endurance multi-tier dashboard
+│   ├── mmi_1_to_1024_tree_loss.png             # 1:1024 MMI binary distribution tree loss
+│   ├── flash_rc_transient_comparison.png       # 2D distributed RC transient settling
+│   ├── flash_3d_thermal_superhighway.png       # 3D conjugate thermal conduction PDE
+│   ├── timing_jitter_eye_decomposition.png     # Dual-Dirac timing jitter & eye closure
+│   ├── omi_vs_hbm4_power_analysis.png          # Thermodynamic scaling vs. JEDEC HBM4
+│   └── ... (additional physical tier diagnostics)
 │
 ├── scripts/                                    # Automation, document compilers & layout generators
 │   ├── build_documents.py                      # Master build pipeline (runs pdflatex & pdftoppm)
@@ -250,23 +253,27 @@ Optical-Memory-Interconnect/
 │   ├── generate_layout_figure.py               # Composite publication datasheet figure generator
 │   └── run_all_simulations.py                  # Master batch runner for all simulation solvers
 │
-├── simulations/                                # Numerical solvers and physics models
+├── simulations/                                # Numerical solvers, physics models & data
 │   ├── simulate_8wg_meep.py                    # 3D Yee-grid FDTD electromagnetic solver (MEEP)
 │   ├── simulate_mmi_splitter.py                # 1:2 Talbot self-imaging splitter solver
-│   ├── simulate_sbend.py                       # Hermite cubic spline waveguide S-bend solver
-│   ├── simulate_talbot_crossing.py             # 90-degree waveguide crossing solver
+│   ├── verify_sbend.py                         # Waveguide S-bend solver & mode verification
+│   ├── simulate_talbot_mmi_crossing.py         # 90-degree waveguide crossing solver
 │   ├── simulate_1024_tree_loss.py              # 10-stage cascaded binary tree loss solver
 │   ├── simulate_flash_rc.py                    # 2D distributed RC diffusion Runge-Kutta solver
-│   ├── simulate_3d_thermal_stack.py            # 42,025-element conjugate thermal conduction PDE
-│   ├── simulate_spatial_transceiver.py         # 25-fs time-step optoelectronic link solver
+│   ├── simulate_3d_thermal_stack.py            # Conjugate thermal conduction PDE solver
+│   ├── simulate_spatial_parallel_transceiver.py# Optoelectronic parallel link solver
 │   ├── simulate_opto_link.py                   # APD direct gate injection circuit solver
 │   ├── simulate_200ghz_omi_system.py           # 200 GHz frontier asymptotic scaling solver
-│   ├── simulate_timing_jitter_eye.py           # Dual-Dirac jitter decomposition solver
+│   ├── simulate_timing_jitter_budget.py        # Dual-Dirac jitter decomposition solver
 │   ├── simulate_flash_ecc_engine.py            # 2nm GAAFET Galois Field SEC-DED ECC solver
 │   ├── simulate_cpo_fabric_reach.py            # Co-Packaged Optics & 20m fabric solver
 │   ├── simulate_readout_arbiter.py             # Discrete-event pipelined arbiter solver
 │   ├── simulate_hbm4_vs_omi_comparison.py      # Thermodynamic benchmark vs HBM4 solver
-│   └── simulate_integrated_omi_flash_system.py # End-to-end multi-tier integrated co-simulator
+│   ├── simulate_power_consumption_analysis.py  # Power breakdown and dynamics analysis
+│   ├── simulate_integrated_omi_flash_system.py # End-to-end multi-tier integrated co-simulator
+│   ├── monte_carlo_discrete_cell_wear.py       # Monte Carlo discrete cell endurance model
+│   ├── optimize_pillar_constellation.py        # Copper pillar constellation optimizer
+│   └── ... (additional testbenches and simulation result JSONs)
 │
 └── references/                                 # Historical baseline comparison literature
     ├── JANUS_IEEE_Manuscript.pdf
