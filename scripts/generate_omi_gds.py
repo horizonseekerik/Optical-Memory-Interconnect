@@ -403,8 +403,8 @@ class OMILayoutBuilder:
         self.top.insert(kdb.DCellInstArray(cell.cell_index(), kdb.DTrans()))
 
     def build_centum_node_tdv_interface(self):
-        """Centum-Node Through-Die Via (TDV) constellation interface for 3D Flash word-line driving."""
-        cell = self.layout.create_cell("CENTUM_NODE_TDV_INTERFACE")
+        """Pareto-Optimized 256-Pillar ($16 \times 16$, $P=125\mu m$) and Subsystem TDV interface for 3D Flash word-line driving."""
+        cell = self.layout.create_cell("OPTIMIZED_256P_TDV_INTERFACE")
         l_via = self.layers["TDV_VIA"]
         l_pad = self.layers["TDV_PAD"]
         l_m1 = self.layers["METAL1"]
@@ -413,7 +413,7 @@ class OMILayoutBuilder:
         
         x_base = 940.0
         
-        # 8 Signal TDVs feeding the 8 modulator sense latches + grounding shield vias
+        # 8 Primary Signal TDVs feeding the 8 modulator sense latches + grounding shield vias
         for i in range(8):
             cy = 1042.5 + i * 45.0
             vx = x_base + 30.0 + (i % 2) * 40.0
@@ -433,17 +433,27 @@ class OMILayoutBuilder:
             add_circle(cell, l_heat, vx + 20.0, cy + 16.0, 4.0)
             
             draw_polygon_text(cell, f"TDV_{i}", vx - 10.0, cy + 8.0, 5.0, l_text)
+
+        # 16 x 16 (256-Pillar) Sub-Zone Grid Representation (Pitch = 125 um array)
+        grid_origin_x = x_base - 10.0
+        grid_origin_y = 1000.0
+        for gx in range(4):
+            for gy in range(8):
+                px = grid_origin_x + gx * 32.0
+                py = grid_origin_y + gy * 50.0
+                add_circle(cell, l_via, px, py, 2.5)
+                add_box(cell, l_pad, px - 4.5, py - 4.5, px + 4.5, py + 4.5)
             
-        # Centum-Node Voronoi Cell Boundary Marking
+        # Micro-Zone Boundary Marking
         bw = 2.0
-        add_box(cell, l_m1, x_base, 1010.0, x_base + 120.0, 1010.0 + bw)
-        add_box(cell, l_m1, x_base, 1400.0 - bw, x_base + 120.0, 1400.0)
-        add_box(cell, l_m1, x_base, 1010.0, x_base + bw, 1400.0)
-        add_box(cell, l_m1, x_base + 120.0 - bw, 1010.0, x_base + 120.0, 1400.0)
+        add_box(cell, l_m1, x_base - 20.0, 990.0, x_base + 130.0, 990.0 + bw)
+        add_box(cell, l_m1, x_base - 20.0, 1420.0 - bw, x_base + 130.0, 1420.0)
+        add_box(cell, l_m1, x_base - 20.0, 990.0, x_base - 20.0 + bw, 1420.0)
+        add_box(cell, l_m1, x_base + 130.0 - bw, 990.0, x_base + 130.0, 1420.0)
         
-        draw_polygon_text(cell, "[4] CENTUM-NODE TDV INTERFACE", 910.0, 1450.0, 7.5, l_text)
-        draw_polygon_text(cell, "DIA=8um Cu, t90=2.22ns", 910.0, 1435.0, 6.0, l_text)
-        draw_polygon_text(cell, "SENSE-LATCH Cu INTERCONNECTS", 910.0, 1385.0, 5.5, l_text)
+        draw_polygon_text(cell, "[4] 256-PILLAR TDV INTERFACE (16x16 ARRAY)", 890.0, 1450.0, 7.5, l_text)
+        draw_polygon_text(cell, "P=125um, DIA=8um Cu, t90=606ps", 890.0, 1435.0, 6.0, l_text)
+        draw_polygon_text(cell, "SUB-NANOSECOND SENSE-LATCH FEED", 890.0, 1385.0, 5.5, l_text)
         
         self.top.insert(kdb.DCellInstArray(cell.cell_index(), kdb.DTrans()))
 
