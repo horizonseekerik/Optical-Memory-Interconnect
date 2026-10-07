@@ -291,9 +291,7 @@ Optical-Memory-Interconnect/
 │   ├── optimize_pillar_constellation.py        # Copper pillar constellation optimizer
 │   └── ... (additional testbenches and simulation result JSONs)
 │
-└── references/                                 # Historical baseline comparison literature
-    ├── JANUS_IEEE_Manuscript.pdf
-    └── JANUS_Mini16_Simulation_Report.pdf
+└── outdated/                                   # Archived historical documents & legacy reports
 ```
 
 ---

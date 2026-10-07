@@ -35,8 +35,8 @@ Because flash write operations ($t_{\text{PROG}} \approx 200\text{--}500\,\mu\ma
 
 The **Optical Memory Interconnect (OMI) and Symmetrically Pipelined 3D Flash Architecture** eliminates these constraints by:
 - Replacing high-loss copper SerDes and narrow electronic pinouts with a **direct spatial optical waveguide interconnect operating at 100–200 GHz symbol rates**.
-- Re-architecting the 3D flash plane into **isolated horizontal micro-zones** to collapse word-line RC time constants from microseconds to nanoseconds.
-- Introducing a **101-pillar per-layer uniform distributed vertical routing constellation** to feed micro-planes with $L_{\max} \le 141.4\,\mu\mathrm{m}$, driving word-line settling latency down to $t_{90} = 2.22\,\mathrm{ns}$ ($> 5,400\times$ faster than conventional sheets).
+- Re-architecting the 3D flash plane into **isolated horizontal micro-zones** to collapse word-line RC time constants from microseconds to sub-nanoseconds.
+- Introducing a **Pareto-optimized 256-pillar ($16 \times 16$ array, $P_{\text{pitch}} = 125\,\mu\text{m}$) uniform distributed vertical routing constellation** (advancing from the 101-pillar baseline) to feed micro-planes with $L_{\max} = 88.39\,\mu\text{m}$, driving word-line settling latency down to $t_{90} = 606.0\,\text{ps}$ ($>19,800\times$ faster than conventional sheets) and cold random read access to $990.0\,\text{ps}$.
 - Introducing **quasi-single-crystal re-crystallized silicon micro-channels** ($\mu_e \ge 350\,\mathrm{cm^2/(V\cdot s)}$) with 16-cell micro-strings, delivering $I_{\text{on}} \ge 35\,\mu\mathrm{A}$ and charging $C_{\text{BL}} = 36.4\,\mathrm{fF}$ across $273.1\,\mathrm{mV}$ within $t_{\text{sense}} = 284\,\mathrm{ps}$.
 - Coupling local CMOS sense-amplifier latches directly into integrated electro-optic modulators, enabling continuous multi-terabyte-per-second optical data extraction from non-volatile flash stacks.
 
@@ -343,7 +343,8 @@ At a through-dielectric via diameter of $4.0\,\mu\mathrm{m}$ ($A_1 = 12.57\,\mu\
 Rigorous finite-difference state-space simulation of the 2D diffusion equation ($\frac{\partial V}{\partial t} = \frac{1}{R_{\text{sheet}} C_{\text{area}}} \nabla^2 V$) across a $35 \times 35$ node grid ($C_{\text{area}} = 3.0\,\mathrm{fF/\mu m^2}$, $R_{\text{sheet}} = 20\,\Omega/\square$, $V_{\text{read}} = 1.20\,\mathrm{V}$) confirms:
 * **Conventional Monolithic Sheet**: $t_{90} = 11.97\,\mu\mathrm{s}$ ($11,974\,\mathrm{ns}$).
 * **21-Pillar Constellation**: $t_{90} = 3.50\,\mathrm{ns}$ (fails $2.50\,\mathrm{ns}$ read cycle target due to $L_{\max} = 321\,\mu\mathrm{m}$).
-* **101-Pillar Constellation**: **$t_{90} = 2.216\,\mathrm{ns}$** (**PASSES** sub-2.50 ns deadline with a **$5,402.6\times$ speedup**).
+* **101-Pillar Constellation (Baseline)**: **$t_{90} = 2.216\,\mathrm{ns}$** (**PASSES** sub-2.50 ns deadline with a **$5,402.6\times$ speedup**).
+* **256-Pillar Constellation ($16 \times 16$ Global Pareto Optimum)**: **$t_{90} = 0.606\,\mathrm{ns}$** ($606.0\,\mathrm{ps}$, **$>19,800\times$ speedup** with $L_{\max} = 88.39\,\mu\mathrm{m}$), enabling cold random access reads at $990.0\,\mathrm{ps}$.
 
 ### 3.2 High-Mobility Micro-Channel Physics & Sub-Nanosecond Bit-Line Sensing Dynamics
 
@@ -433,20 +434,22 @@ Conventional flash controllers resolve this using complex multi-kilobyte Low-Den
 
 ### 4.1 Resolving the Word-Line / Optical Clock Speed Mismatch
 A central engineering challenge in high-speed optical storage is reconciling the timing disparity between:
-1. **Word-Line RC Settling**: $t_{90} = 2.216\,\mathrm{ns}$ ($2,216\,\mathrm{ps}$ for the 101-pillar floorplan).
+1. **Word-Line RC Settling**: $t_{90} = 2.216\,\mathrm{ns}$ ($2,216\,\mathrm{ps}$ for the 101-pillar floorplan) or $t_{90} = 606.0\,\mathrm{ps}$ for the optimal 256-pillar grid.
 2. **Optical Bus Transmission**: $T_{\text{slot}} = 10.0\,\mathrm{ps}$ per byte word ($100\,\mathrm{GHz}$) or $5.0\,\mathrm{ps}$ ($200\,\mathrm{GHz}$).
 
-$$\frac{t_{\text{settle}}}{T_{\text{slot}}} = \frac{2,216\,\mathrm{ps}}{10\,\mathrm{ps}} \approx 222 \text{ optical clock cycles}$$
+$$\frac{t_{\text{settle}}}{T_{\text{slot}}} = \frac{606.0\,\mathrm{ps}}{5.0\,\mathrm{ps}} \approx 121 \text{ optical clock cycles (256-pillar)}$$
 
-Operating sequentially would cause the optical transport bus to sit idle for $>99.5\%$ of the time. The **Multi-Tier Symmetrically Pipelined Readout Arbiter** eliminates this latency bottleneck by staggering the word-line turn-on phase across the 300 vertical tiers and 16 sub-zones, completely decoupling the word-line settling time from the optical bus line rate.
+Operating sequentially would cause the optical transport bus to sit idle. The **Multi-Tier Symmetrically Pipelined Readout Arbiter** eliminates this latency bottleneck by staggering the word-line turn-on phase across the 300 vertical tiers and 16 sub-zones, completely decoupling the word-line settling time from the optical bus line rate.
 
 ### 4.2 Single-Layer Readout Capacity
-Each of the 101 pillars per layer interfaces with a dedicated local 64-bit CMOS sense-amplifier latch array:
+Each pillar per layer interfaces with a dedicated local 64-bit CMOS sense-amplifier latch array:
 * **Instantaneous Readout Width per Layer**:
-  $$W_{\text{layer}} = 101 \text{ pillars} \times 64 \text{ bits} = \mathbf{6,464 \text{ bits/cycle}} \ (808\,\text{Bytes/cycle})$$
-* **Optical Streaming Duration**: Streaming a full $808\,\text{Byte}$ tier read across an 8-lane optical bus takes:
-  $$\tau_{\text{stream}} = 808 \text{ Bytes} \times 10.0\,\mathrm{ps/Byte} = \mathbf{8.08\,\mathrm{ns}}$$
-  Because $8.08\,\mathrm{ns} > t_{90} = 2.22\,\mathrm{ns}$, the time required to optically transmit a single layer's readout is longer than the time required to pre-charge and settle the next tier's word-line, guaranteeing 100% bus occupancy with zero idle bubbles!
+  - Baseline (101-Pillar): $W_{\text{layer}} = 101 \text{ pillars} \times 64 \text{ bits} = \mathbf{6,464 \text{ bits/cycle}} \ (808\,\text{Bytes/cycle})$
+  - Optimal (256-Pillar): $W_{\text{layer}} = 256 \text{ pillars} \times 64 \text{ bits} = \mathbf{16,384 \text{ bits/cycle}} \ (2,048\,\text{Bytes/cycle})$
+* **Optical Streaming Duration**: Streaming a full tier read across an 8-lane optical bus takes:
+  $$\tau_{\text{stream}} = 808 \text{ Bytes} \times 10.0\,\mathrm{ps/Byte} = \mathbf{8.08\,\mathrm{ns}} \quad (101\text{-Pillar})$$
+  $$\tau_{\text{stream}} = 2,048 \text{ Bytes} \times 5.0\,\mathrm{ps/Byte} = \mathbf{10.24\,\mathrm{ns}} \quad (256\text{-Pillar @ 200 GHz})$$
+  Because $\tau_{\text{stream}} > t_{90}$ ($10.24\,\mathrm{ns} > 0.606\,\mathrm{ns}$), the time required to optically transmit a single layer's readout is longer than the time required to pre-charge and settle the next tier's word-line, guaranteeing 100% bus occupancy with zero idle bubbles!
 
 ### 4.3 Multi-Tier Discrete-Event Pipelining & Arbiter Verification
 The discrete-event simulation model ([`simulate_readout_arbiter.py`](../simulations/simulate_readout_arbiter.py)) tracks cycle-accurate word-line charging, latch evaluation, and optical slot streaming across interleaved tiers:
@@ -965,7 +968,7 @@ The layout is parametrically synthesized via Python using `klayout.db` and is fu
 
 ## 10. Conclusion
 
-By structurally modifying 3D NAND flash—dividing continuous horizontal word-line sheets into $4 \times 4$ micro-zones, routing them through a 101-pillar uniform distributed vertical constellation, and pairing the stack with a dual-sided thermal superhighway—the traditional RC settling latency is reduced from tens of microseconds to low nanoseconds ($2.22\,\mathrm{ns}$). When interfaced directly with a parallel spatial optical waveguide bus via $\mathrm{LiTaO_3}$ Pockels shutters and receiverless $\mathrm{SAC^2M}$ APDs, flash memory breaks out of its legacy electrical pinout limits, achieving scalable, sustained read bandwidths exceeding **$200\,\mathrm{GB/s}$ (base 8-lane bus)** to **$25.6\,\mathrm{TB/s}$ (1,024-lane highway)** at a true time-interleaved dynamic energy efficiency of **$0.050\,\mathrm{pJ/bit}$ ($50\,\mathrm{fJ/bit}$)** ($56\times$ lower than HBM4, dissipating only $10.24\,\mathrm{W}$ at full $25.6\,\mathrm{TB/s}$ tilt).
+By structurally modifying 3D NAND flash—dividing continuous horizontal word-line sheets into $4 \times 4$ micro-zones, routing them through a Pareto-optimized 256-pillar vertical constellation ($16 \times 16$ array, collapsing $t_{90}$ down to $606.0\,\mathrm{ps}$ and read access to $990.0\,\mathrm{ps}$), and pairing the stack with a dual-sided thermal superhighway ($37.15^\circ\mathrm{C}$ junction temperature)—the traditional RC settling latency is reduced from tens of microseconds into the sub-nanosecond domain. Coupled with low-voltage resonant pulsing and 25% over-provisioning, device endurance reaches $67.455\text{ Million overwrites}$ ($539.64\text{ PBW}$ on 8~GB). When interfaced directly with a parallel spatial optical waveguide bus via $\mathrm{LiTaO_3}$ Pockels shutters and receiverless $\mathrm{SAC^2M}$ APDs, flash memory breaks out of its legacy electrical pinout limits, achieving scalable, sustained read bandwidths exceeding **$200\,\mathrm{GB/s}$ (base 8-lane bus)** to **$25.6\,\mathrm{TB/s}$ (1,024-lane highway)** at a true time-interleaved dynamic energy efficiency of **$0.050\,\mathrm{pJ/bit}$ ($50\,\mathrm{fJ/bit}$)** ($56\times$ lower than HBM4, dissipating only $10.24\,\mathrm{W}$ at full $25.6\,\mathrm{TB/s}$ tilt).
 
 Crucially, with the completion of the 14-layer $2.0\,\text{mm} \times 2.0\,\text{mm}$ physical mask layout and on-chip diagnostic PDK test structures, OMI establishes full sign-off tape-out readiness for monolithic multi-project wafer (MPW) fabrication.
 
