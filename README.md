@@ -89,38 +89,44 @@ Every physical dimension of the OMI architecture has been verified against strin
 
 ---
 
-## Methodological Demarcation
+## Methodological Demarcation: Simulated Foundations vs. Hypothetical Analytical Models
 
-To ensure absolute industrial and academic integrity, this codebase explicitly differentiates between directly simulated physical foundations and mathematically cascaded projections:
+To ensure absolute industrial and academic integrity, this codebase explicitly differentiates between directly simulated physical foundations and mathematically modeled hypothetical/analytical projections:
+
+- **Directly Simulated Physical Foundations**: Physical component-level phenomena solved numerically via first-principles solvers (e.g., Yee-grid 3D FDTD electromagnetic wave propagation in MEEP for waveguides, splitters, and crossings; finite-difference transient thermal solving; and Runge-Kutta numerical solving of 2D word-line voltage diffusion).
+- **Hypothetical & Analytical Scaling Models**: Full macro-system figures—such as full-die area overheads, total chip floorplan sizing, 1,024-lane highway power totals, and multi-tier stack footprints—represent **hypothetical design models and analytical projections** rather than physical fabrication measurements. They are derived by mathematically cascading the foundational component models across idealized geometrical assumptions.
 
 ```
 +-----------------------------------------------------------------------------------------+
 |                               OMI METHODOLOGICAL FRAMEWORK                              |
 +-----------------------------------------------------------------------------------------+
 |                                                                                         |
-|  [ DIRECTLY SIMULATED FOUNDATION ]                 [ ANALYTICALLY PROJECTED SCALING ]    |
-|  (8-Waveguide Base Bus)                            (64-Lane & 1,024-Lane Highways)       |
+|  [ DIRECTLY SIMULATED FOUNDATIONS ]              [ HYPOTHETICAL ANALYTICAL MODELS ]     |
+|  (First-Principles Solvers on Base Devices)      (Macro Sizing, Floorplans & Scaling)   |
 |                                                                                         |
-|  * Full 3D MEEP FDTD Maxwell Yee-Grid (40 nm)      * 1:1024 Binary Distribution Tree    |
-|    - 1:2 MMI Splitter (0.140 dB excess loss)         - 10-Stage Cascaded S-Parameters   |
-|    - Hermite S-Bends (<0.003 dB radiation)           - Summed Excess Losses (1.730 dB)  |
-|    - Talbot 90° Crossings (0.038 dB loss)            - 67.14% Optical Efficiency        |
+|  * Full 3D MEEP FDTD Maxwell Yee-Grid (40 nm)    * 1:1024 Binary Distribution Tree      |
+|    - 1:2 MMI Splitter (0.140 dB excess loss)       - 10-Stage Cascaded S-Parameters     |
+|    - Hermite S-Bends (<0.003 dB radiation)         - Summed Excess Losses (1.730 dB)    |
+|    - Talbot 90° Crossings (0.038 dB loss)          - 67.14% Optical Efficiency          |
 |    - 8-Waveguide DTI Crosstalk (<-45.2 dB)                                              |
-|                                                    * Concurrency Sizing (300-600 zones) |
-|  * 2D Word-Line Distributed RC Diffusion             - Evaluated against 4,800-zone     |
-|    - 1,225-Node Runge-Kutta 4th-Order ODEs             available pool (8.0x headroom)   |
-|    - 101-Pillar Centum-Node (t90 = 2.216 ns)                                            |
-|                                                    * Amortized System Scaling           |
-|  * 3D Conjugate Heat Transfer                        - 10.24 W Full Highway Power       |
-|    - 42,025-Element Finite-Difference PDE            - 577.0 W Reclaimed GPU TDP        |
-|    - Clamped Peak Core Temp (41.20°C)                - 19-Point Sign-Off Closure        |
+|                                                  * Hypothetical Die & Area Floorplans   |
+|  * 2D Word-Line Distributed RC Diffusion           - 2.0 mm x 2.0 mm MPW Tile Model     |
+|    - 1,225-Node Runge-Kutta 4th-Order ODEs         - Projected KOZ Area Overhead        |
+|    - 101-Pillar Centum-Node (t90 = 2.216 ns)       - Concurrency Sizing (300-600 zones) |
 |                                                                                         |
-|  * 25-fs Circuit-Level Optoelectronic Transceivers                                      |
+|  * 3D Conjugate Heat Transfer                    * Amortized System Scaling             |
+|    - 42,025-Element Finite-Difference PDE          - 10.24 W Full Highway Power Model   |
+|    - Clamped Peak Core Temp (41.20°C)              - 577.0 W Reclaimed GPU TDP Model    |
+|                                                    - 19-Point Sign-Off Closure Metrics  |
+|  * 25-fs Circuit-Level Transceivers                                                     |
 |    - APD Direct Gate Injection (751.1 mV)                                               |
 |    - Dual-Dirac Jitter (0.946 ps, 81.1% Eye)                                            |
 |    - 2nm GAAFET Hsiao SEC-DED ECC (38.2 ps)                                             |
 +-----------------------------------------------------------------------------------------+
 ```
+
+> [!NOTE]
+> **Clarification on Modeling Scope**: Simulation results referenced throughout this repository and its reports (such as the Simulation Report and IEEE manuscript) represent numerical solutions of multi-physics differential equations and hypothetical architectural projections. Metrics regarding macro-die areas (e.g., 2.0 mm × 2.0 mm tile area, keep-out zone percentages, and total multi-lane highway footings) are hypothetical engineering target models rather than empirical post-silicon metrology.
 
 ---
 
@@ -140,6 +146,9 @@ To ensure absolute industrial and academic integrity, this codebase explicitly d
 ## Physical Layout & Multi-Project Wafer (MPW) Tape-Out Model (GDSII)
 
 To advance OMI from numerical co-simulation (**TRL 4**) to foundry tape-out readiness (**TRL 5/6**), this repository provides the complete, procedural **GDSII physical mask layout** for the **8-waveguide transceiver architecture** implemented on a standard **2.0 mm × 2.0 mm (4.0 mm²) Multi-Project Wafer (MPW) tile**.
+
+> [!NOTE]
+> **Hypothetical Tape-Out Vehicle**: The 2.0 mm × 2.0 mm MPW floorplan and sub-cell dimensions represent a **hypothetical physical design model** and parametric demonstration vehicle constructed according to standard silicon photonics design rules, rather than post-fabrication measured silicon.
 
 The layout is parametrically generated via Python using `klayout.db` and is fully compliant with leading silicon photonics foundry design rule manuals (DRMs).
 
@@ -199,6 +208,7 @@ This repository contains the complete publication-grade manuscript suite:
 2. **Multi-Physics Simulation Report & Benchmarks** ([`manuscript/OMI_SIMULATION_REPORT_AND_BENCHMARKS.pdf`](manuscript/OMI_SIMULATION_REPORT_AND_BENCHMARKS.pdf)):
    - **11 Pages**, concise, balanced, publication-grade empirical reference manual.
    - Houses the 7 core physical simulation dashboards and foundry tape-out datasheets enlarged to two-column width (two-column width), paired with in-depth analytical text, governing formulas, itemized power breakdown (Table I & Table II), master 19-point sign-off verification matrix (Table III), system-level LLaMA-3 70B inference profiling (Table IV), and 14-layer MPW physical mask layout map (Table V).
+   - *Note on Scope*: Documents component-level numerical solver outputs and hypothetical architectural scaling models (such as projected macro area allocations, power dissipation, and endurance limits) establishing theoretical feasibility prior to tape-out.
 
 ---
 
