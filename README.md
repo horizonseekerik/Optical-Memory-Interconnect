@@ -17,15 +17,15 @@
 
 The **Optical Memory Interconnect (OMI)** is a monolithic-compatible, direct-optical 3D NAND flash storage architecture designed to decisively break the **Memory Wall** in frontier artificial intelligence (LLMs, generative diffusion, transformer inference) and high-performance computing (HPC) clusters.
 
-Contemporary High Bandwidth Memory (**JEDEC HBM4**) requires thousands of capacitive electrical micro-bumps and silicon interposers, dissipating **$587.2\,\text{W}$** across an 8-stack cluster at $25.6\,\text{TB/s}$ ($2.80\,\text{pJ/bit}$) and consuming $84.0\,\text{W}$ of static standby refresh power. Conventional 3D NAND flash offers dense, low-cost non-volatile storage but is fundamentally crippled by multi-microsecond ($10\text{--}15\,\mu\text{s}$) distributed word-line $RC$ diffusion delays and lossy copper SerDes transceivers ($5\text{--}10\,\text{pJ/bit}$).
+Contemporary High Bandwidth Memory (**JEDEC HBM4**) requires thousands of capacitive electrical micro-bumps and silicon interposers, dissipating **587.2 W** across an 8-stack cluster at 25.6 TB/s (2.80 pJ/bit) and consuming 84.0 W of static standby refresh power. Conventional 3D NAND flash offers dense, low-cost non-volatile storage but is fundamentally crippled by multi-microsecond (10--15 µs) distributed word-line RC diffusion delays and lossy copper SerDes transceivers (5--10 pJ/bit).
 
 OMI resolves these physics limitations through **six tightly coupled architectural innovations**:
-1. **Centum-Node TDV Constellation**: 101 spatially distributed vertical copper feedthroughs ($P_{\text{pitch}} = 200\,\mu\text{m}$) compress word-line diffusion length from $2,000\,\mu\text{m} \to 141.42\,\mu\text{m}$, reducing $90\%$ voltage settling latency from $12.0\,\mu\text{s} \to \mathbf{2.216\,\text{ns}}$ (**$5,402.6\times$ speedup**).
-2. **Photonic Xtacking Base Die**: A low-loss stoichiometric silicon nitride ($\text{Si}_3\text{N}_4$) 1:1024 binary optical distribution tree, thin-film lithium tantalate ($\text{LiTaO}_3$) Pockels modulators ($V_\pi = 1.10\,\text{V}$), and separate absorption, charge, and multiplication ($\text{SAC}^2\text{M}$) Ge/Si APDs are fabricated on a **base silicon carrier wafer**. The 300-tier 3D NAND array is hybrid-bonded (Cu-Cu DBI) on top, completely isolating thermal budgets and enabling **$100\%$ Known Good Die (KGD)** optical wafer probing prior to assembly.
-3. **Receiverless Direct Gate Injection**: A $0.704\,\text{fJ}$ optical pulse generates $3.38\,\text{fC}$ of photocurrent in a $\text{SAC}^2\text{M}$ APD ($M = 6.0$), depositing charge directly onto the $4.5\,\text{fF}$ gate capacitance of a clocked CMOS StrongARM latch. This induces a **$751.1\,\text{mV}$** voltage swing with $+501.1\,\text{mV}$ margin above threshold, eliminating power-hungry Transimpedance Amplifiers (TIAs) and SerDes entirely to achieve a raw $\text{BER} = \mathbf{3.9 \times 10^{-29}} \ll 10^{-15}$.
-4. **Dual-Sided Thermal Superhighway**: 700 dummy copper thermal vias ($k = 400\,\text{W/mK}$) and an electroplated $50\,\mu\text{m}$ copper heat spreader elevate effective vertical thermal conductivity to $k_{z, \text{eff}} = 14.50\,\text{W/mK}$, clamping peak steady-state junction temperature to **$41.20^\circ\text{C}$** (**$+43.80^\circ\text{C}$ safety margin** below the $85^\circ\text{C}$ specification).
-5. **Sub-Nanosecond On-the-Fly ECC**: Synthesized in 2nm GAAFET logic, an unrolled $(72, 64)$ Hsiao odd-weight SEC-DED combinational decoder evaluates in **$t_{\text{decode}} = 38.2\,\text{ps}$** ($<45.0\,\text{ps}$ single clock cycle limit), driving end-of-life residual bit error rate below $\mathbf{1.29 \times 10^{-20}}$.
-6. **Rack-Scale Co-Packaged Optics (CPO)**: Inverted nanotaper spot-size converters ($0.52\,\text{dB/facet}$) provide **$+8.26\,\text{dB}$ link margin** across a $20\,\text{m}$ intra-rack optical ribbon.
+1. **Centum-Node TDV Constellation**: 101 spatially distributed vertical copper feedthroughs (P_pitch = 200 µm) compress word-line diffusion length from 2,000 µm → 141.42 µm, reducing 90\% voltage settling latency from 12.0 µs → **2.216 ns** (**5,402.6× speedup**).
+2. **Photonic Xtacking Base Die**: A low-loss stoichiometric silicon nitride (Si₃N₄) 1:1024 binary optical distribution tree, thin-film lithium tantalate (LiTaO₃) Pockels modulators (V_π = 1.10 V), and separate absorption, charge, and multiplication (SACM) Ge/Si APDs are fabricated on a **base silicon carrier wafer**. The 300-tier 3D NAND array is hybrid-bonded (Cu-Cu DBI) on top, completely isolating thermal budgets and enabling **100\% Known Good Die (KGD)** optical wafer probing prior to assembly.
+3. **Receiverless Direct Gate Injection**: A 0.704 fJ optical pulse generates 3.38 fC of photocurrent in a SACM APD (M = 6.0), depositing charge directly onto the 4.5 fF gate capacitance of a clocked CMOS StrongARM latch. This induces a **751.1 mV** voltage swing with +501.1 mV margin above threshold, eliminating power-hungry Transimpedance Amplifiers (TIAs) and SerDes entirely to achieve a raw BER = **3.9 × 10⁻²⁹** << 10⁻¹⁵.
+4. **Dual-Sided Thermal Superhighway**: 700 dummy copper thermal vias (k = 400 W/mK) and an electroplated 50 µm copper heat spreader elevate effective vertical thermal conductivity to k_z, eff = 14.50 W/mK, clamping peak steady-state junction temperature to **41.20^°C** (**+43.80^°C safety margin** below the 85^°C specification).
+5. **Sub-Nanosecond On-the-Fly ECC**: Synthesized in 2nm GAAFET logic, an unrolled (72, 64) Hsiao odd-weight SEC-DED combinational decoder evaluates in **t_decode = 38.2 ps** (<45.0 ps single clock cycle limit), driving end-of-life residual bit error rate below **1.29 × 10⁻²⁰**.
+6. **Rack-Scale Co-Packaged Optics (CPO)**: Inverted nanotaper spot-size converters (0.52 dB/facet) provide **+8.26 dB link margin** across a 20 m intra-rack optical ribbon.
 
 ---
 
@@ -33,31 +33,31 @@ OMI resolves these physics limitations through **six tightly coupled architectur
 
 | Quantitative Metric / Parameter | JEDEC HBM4 DRAM (8 Stacks) | OMI-1024 3D Flash Highway | Architectural Advantage |
 | :--- | :---: | :---: | :---: |
-| **Sustained Read Throughput** | $25.60\,\text{TB/s}$ ($204.8\,\text{Tb/s}$) | $\mathbf{25.60\,\text{TB/s}}$ ($204.8\,\text{Tb/s}$) | **Matched Target Frontier** |
-| **Active Energy per Bit** | $2.80\,\text{pJ/bit}$ | $\mathbf{0.050\,\text{pJ/bit}}$ ($50.0\,\text{fJ/bit}$) | **$56.0\times$ Lower Energy** |
-| **Full-System Active Power** | $587.2\,\text{W}$ | $\mathbf{10.24\,\text{W}}$ | **$98.26\%$ Power Reduction** |
-| **Standby Idle Leakage ($85^\circ\text{C}$)** | $84.0\,\text{W}$ (Capacitive Refresh) | $\mathbf{50.0\,\text{mW}}$ (Peripheral Bias) | **$1,680\times$ Leakage Elimination** |
-| **Interconnect Thermal Flux** | $60.7\,\text{W/cm}^2$ | $\mathbf{10.24\,\text{W/cm}^2}$ | **$5.93\times$ Thermal Relief** |
-| **Peak Core Operating Temp ($T_{\max}$)** | $\sim 85\text{--}95^\circ\text{C}$ (Thermal Throttling) | $\mathbf{41.20^\circ\text{C}}$ | **$+43.80^\circ\text{C}$ Safety Headroom** |
-| **GPU Envelope Compute Reclamation** | $412.8\,\text{W}$ (Within $1,000\,\text{W}$ TDP) | $\mathbf{989.76\,\text{W}}$ (Within $1,000\,\text{W}$ TDP) | **$+577.0\,\text{W}$ Reclaimed (+139.8% Compute)** |
+| **Sustained Read Throughput** | 25.60 TB/s (204.8 Tb/s) | **25.60 TB/s** (204.8 Tb/s) | **Matched Target Frontier** |
+| **Active Energy per Bit** | 2.80 pJ/bit | **0.050 pJ/bit** (50.0 fJ/bit) | **56.0× Lower Energy** |
+| **Full-System Active Power** | 587.2 W | **10.24 W** | **98.26\% Power Reduction** |
+| **Standby Idle Leakage (85^°C)** | 84.0 W (Capacitive Refresh) | **50.0 mW** (Peripheral Bias) | **1,680× Leakage Elimination** |
+| **Interconnect Thermal Flux** | 60.7 W/cm² | **10.24 W/cm²** | **5.93× Thermal Relief** |
+| **Peak Core Operating Temp (T_max)** | ~ 85--95^°C (Thermal Throttling) | **41.20^°C** | **+43.80^°C Safety Headroom** |
+| **GPU Envelope Compute Reclamation** | 412.8 W (Within 1,000 W TDP) | **989.76 W** (Within 1,000 W TDP) | **+577.0 W Reclaimed (+139.8% Compute)** |
 | **Memory Volatility** | Volatile DRAM | **Non-Volatile Charge-Trap Flash** | **Instant-On Zero-Power Persistence** |
 
 ---
 
 ## System-Level LLM Inference Profiling on LLaMA-3 70B
 
-Evaluating batch size = 1 autoregressive generation across equal accelerator power envelopes ($1,000\,\text{W}$ TDP ceiling):
+Evaluating batch size = 1 autoregressive generation across equal accelerator power envelopes (1,000 W TDP ceiling):
 
 | Metric | NVIDIA H100 SXM | NVIDIA B200 | OMI-Accelerated GPU Subsystem |
 | :--- | :---: | :---: | :---: |
-| **Memory Standard** | $80\,\text{GB}$ HBM3 | $192\,\text{GB}$ HBM3e | $\mathbf{500\,\text{GB}}$ **OMI 3D Flash** |
-| **Memory Bandwidth** | $3.35\,\text{TB/s}$ | $8.00\,\text{TB/s}$ | $\mathbf{25.60\,\text{TB/s}}$ |
-| **Memory Subsystem Power** | $150\,\text{W}$ | $220\,\text{W}$ | $\mathbf{10.24\,\text{W}}$ |
-| **Total Accelerator Power** | $700\,\text{W}$ | $1,000\,\text{W}$ | $\mathbf{1,000\,\text{W}}$ |
-| **Usable Compute Power** | $550\,\text{W}$ | $780\,\text{W}$ | $\mathbf{989.76\,\text{W}}$ ($+26.9\%$ vs B200) |
-| **Generation Throughput** | $2,840\,\text{tok/s}$ | $6,120\,\text{tok/s}$ | $\mathbf{19,450\,\text{tok/s}}$ (**$3.18\times$ vs B200**) |
-| **Energy per Token** | $246.5\,\mu\text{J}$ | $163.4\,\mu\text{J}$ | $\mathbf{51.4\,\mu\text{J}}$ (**$3.18\times$ Lower Energy**) |
-| **Efficiency Advantage** | $1.0\times$ | $1.51\times$ | $\mathbf{4.80\times}$ |
+| **Memory Standard** | 80 GB HBM3 | 192 GB HBM3e | **500 GB** **OMI 3D Flash** |
+| **Memory Bandwidth** | 3.35 TB/s | 8.00 TB/s | **25.60 TB/s** |
+| **Memory Subsystem Power** | 150 W | 220 W | **10.24 W** |
+| **Total Accelerator Power** | 700 W | 1,000 W | **1,000 W** |
+| **Usable Compute Power** | 550 W | 780 W | **989.76 W** (+26.9\% vs B200) |
+| **Generation Throughput** | 2,840 tok/s | 6,120 tok/s | **19,450 tok/s** (**3.18× vs B200**) |
+| **Energy per Token** | 246.5 µJ | 163.4 µJ | **51.4 µJ** (**3.18× Lower Energy**) |
+| **Efficiency Advantage** | 1.0× | 1.51× | **4.80×** |
 
 ---
 
@@ -67,25 +67,25 @@ Every physical dimension of the OMI architecture has been verified against strin
 
 | # | Physical Domain | Quantitative Metric / Parameter | Target Spec | Achieved Value | Safety Margin | Sign-Off |
 | :-: | :--- | :--- | :---: | :---: | :---: | :-: |
-| 1 | Tier 1: Optics | 1:2 MMI Splitter Excess Insertion Loss | $\le 0.20\,\text{dB}$ | $\mathbf{0.140\,\text{dB}}$ | $+0.060\,\text{dB}$ | **PASS** |
-| 2 | Tier 1: Optics | 1:2 MMI Splitter Power Imbalance | $\le 0.05\,\text{dB}$ | $\mathbf{0.0000\,\text{dB}}$ | $+0.050\,\text{dB}$ | **PASS** |
-| 3 | Tier 1: Optics | 1:2 MMI Return Loss Reflection ($S_{11}$) | $\le -25.0\,\text{dB}$ | $\mathbf{-25.47\,\text{dB}}$ | $+0.47\,\text{dB}$ | **PASS** |
-| 4 | Tier 1: Optics | DTI Waveguide Inter-Lane Crosstalk ($2.0\,\text{cm}$) | $\le -40.0\,\text{dB}$ | $\mathbf{-45.20\,\text{dB}}$ | $+5.20\,\text{dB}$ | **PASS** |
-| 5 | Tier 1: Optics | Talbot Waveguide Crossing Insertion Loss | $\le 0.050\,\text{dB}$ | $\mathbf{0.038\,\text{dB}}$ | $+0.012\,\text{dB}$ | **PASS** |
-| 6 | Tier 1: Optics | 1:1024 MMI Tree Optical Efficiency (Projected) | $\ge 60.0\%$ | $\mathbf{67.14\%}$ | $+7.14\%$ | **PASS** |
-| 7 | Tier 2: Electrical | Word-Line 90% Voltage Settling Latency ($t_{90}$) | $\le 2.50\,\text{ns}$ | $\mathbf{2.216\,\text{ns}}$ | $+0.284\,\text{ns}$ | **PASS** |
-| 8 | Tier 2: Electrical | Spatially Distributed TDV Constellation Area Overhead | $\le 0.10\%$ | $\mathbf{0.0317\%}$ | $+0.068\%$ | **PASS** |
-| 9 | Tier 3: Thermal | Peak Steady-State Core Temperature ($T_{\max}$) | $\le 85.0^\circ\text{C}$ | $\mathbf{41.20^\circ\text{C}}$ | $+43.80^\circ\text{C}$ | **PASS** |
-| 10 | Tier 3: Thermal | Vertical Thermal Conductivity Enhancement ($k_{z, \text{eff}}$) | $\ge 10.0\,\text{W/mK}$ | $\mathbf{14.50\,\text{W/mK}}$ | $+4.50\,\text{W/mK}$ | **PASS** |
-| 11 | Tier 4: Transceiver | 200 GHz Optical Eye Opening Ratio | $\ge 60.0\%$ | $\mathbf{81.10\%}$ | $+21.10\%$ | **PASS** |
-| 12 | Tier 4: Transceiver | $\text{SAC}^2\text{M}$ APD Direct Gate Voltage Swing | $\ge 500.0\,\text{mV}$ | $\mathbf{751.1\,\text{mV}}$ | $+251.1\,\text{mV}$ | **PASS** |
-| 13 | Tier 4: Transceiver | Optoelectronic Bit Error Rate (BER) | $\le 10^{-15}$ | $\mathbf{3.9 \times 10^{-29}}$ | $+14.0\text{ OOM}$ | **PASS** |
-| 14 | Tier 5: Architecture | Multi-Tier Readout Bus Saturation | $= 100.0\%$ | $\mathbf{100.0\%}\text{ (0 bubbles)}$ | **Exact** | **PASS** |
-| 15 | Tier 5: Architecture | Pipeline Concurrency Reserve Headroom ($200\,\text{GHz}$) | $\ge 4.0\times$ | $\mathbf{8.0\times}\text{ (600/4,800)}$ | $+4.0\times$ | **PASS** |
-| 16 | Tier 5: Architecture | Full-Highway Active Power Dissipation ($25.6\,\text{TB/s}$) | $\le 15.0\,\text{W}$ | $\mathbf{10.24\,\text{W}}$ | $+4.76\,\text{W}$ | **PASS** |
-| 17 | Tier 4: Transceiver | Physical Layer Timing Jitter @ BER=$10^{-15}$ (200G) | $\le 30.0\%\text{ UI}$ | $\mathbf{18.9\%\text{ UI}}\text{ (0.946 ps)}$ | $+11.1\%\text{ UI}$ | **PASS** |
-| 18 | Tier 2: Storage | Sub-Nanosecond On-the-Fly ECC Decoding Latency | $\le 45.0\,\text{ps}$ | $\mathbf{38.2\,\text{ps}}\text{ (12.4 fJ/b)}$ | $+6.8\,\text{ps}$ | **PASS** |
-| 19 | Tier 1: Optics | CPO Spot-Size Converter & 20m Fabric Link Margin | $\ge +3.0\,\text{dB}$ | $\mathbf{+8.26\,\text{dB}}\text{ (200 G)}$ | $+5.26\,\text{dB}$ | **PASS** |
+| 1 | Tier 1: Optics | 1:2 MMI Splitter Excess Insertion Loss | ≤ 0.20 dB | **0.140 dB** | +0.060 dB | **PASS** |
+| 2 | Tier 1: Optics | 1:2 MMI Splitter Power Imbalance | ≤ 0.05 dB | **0.0000 dB** | +0.050 dB | **PASS** |
+| 3 | Tier 1: Optics | 1:2 MMI Return Loss Reflection (S₁1) | ≤ -25.0 dB | **-25.47 dB** | +0.47 dB | **PASS** |
+| 4 | Tier 1: Optics | DTI Waveguide Inter-Lane Crosstalk (2.0 cm) | ≤ -40.0 dB | **-45.20 dB** | +5.20 dB | **PASS** |
+| 5 | Tier 1: Optics | Talbot Waveguide Crossing Insertion Loss | ≤ 0.050 dB | **0.038 dB** | +0.012 dB | **PASS** |
+| 6 | Tier 1: Optics | 1:1024 MMI Tree Optical Efficiency (Projected) | ≥ 60.0\% | **67.14\%** | +7.14\% | **PASS** |
+| 7 | Tier 2: Electrical | Word-Line 90% Voltage Settling Latency (t₉0) | ≤ 2.50 ns | **2.216 ns** | +0.284 ns | **PASS** |
+| 8 | Tier 2: Electrical | Spatially Distributed TDV Constellation Area Overhead | ≤ 0.10\% | **0.0317\%** | +0.068\% | **PASS** |
+| 9 | Tier 3: Thermal | Peak Steady-State Core Temperature (T_max) | ≤ 85.0^°C | **41.20^°C** | +43.80^°C | **PASS** |
+| 10 | Tier 3: Thermal | Vertical Thermal Conductivity Enhancement (k_z, eff) | ≥ 10.0 W/mK | **14.50 W/mK** | +4.50 W/mK | **PASS** |
+| 11 | Tier 4: Transceiver | 200 GHz Optical Eye Opening Ratio | ≥ 60.0\% | **81.10\%** | +21.10\% | **PASS** |
+| 12 | Tier 4: Transceiver | SACM APD Direct Gate Voltage Swing | ≥ 500.0 mV | **751.1 mV** | +251.1 mV | **PASS** |
+| 13 | Tier 4: Transceiver | Optoelectronic Bit Error Rate (BER) | ≤ 10⁻¹⁵ | **3.9 × 10⁻²⁹** | +14.0 OOM | **PASS** |
+| 14 | Tier 5: Architecture | Multi-Tier Readout Bus Saturation | = 100.0\% | **100.0\% (0 bubbles)** | **Exact** | **PASS** |
+| 15 | Tier 5: Architecture | Pipeline Concurrency Reserve Headroom (200 GHz) | ≥ 4.0× | **8.0× (600/4,800)** | +4.0× | **PASS** |
+| 16 | Tier 5: Architecture | Full-Highway Active Power Dissipation (25.6 TB/s) | ≤ 15.0 W | **10.24 W** | +4.76 W | **PASS** |
+| 17 | Tier 4: Transceiver | Physical Layer Timing Jitter @ BER=10⁻¹⁵ (200G) | ≤ 30.0\% UI | **18.9\% UI (0.946 ps)** | +11.1\% UI | **PASS** |
+| 18 | Tier 2: Storage | Sub-Nanosecond On-the-Fly ECC Decoding Latency | ≤ 45.0 ps | **38.2 ps (12.4 fJ/b)** | +6.8 ps | **PASS** |
+| 19 | Tier 1: Optics | CPO Spot-Size Converter & 20m Fabric Link Margin | ≥ +3.0 dB | **+8.26 dB (200 G)** | +5.26 dB | **PASS** |
 
 ---
 
@@ -128,18 +128,18 @@ To ensure absolute industrial and academic integrity, this codebase explicitly d
 
 | Dashboard | Physical Mechanism & Focus |
 | :--- | :--- |
-| **Fig. 1: Top-Level Suite** (`plots/integrated_system_architecture.png`) | End-to-end multi-tier architecture, optical power budget waterfall, dynamic signal pipeline on optical lane 0, first-byte latency waterfall ($2.50\,\text{ns}$), and sustained throughput scaling. |
-| **Fig. 2: 1:1024 Binary Tree** (`plots/mmi_1_to_1024_tree_loss.png`) | 10-stage cascaded MMI binary tree loss scaling ($31.833\,\text{dB}$ total loss, $1.730\,\text{dB}$ non-splitting loss), optical carrier delivery ($150.0\,\mu\text{W}$), and $228.8\,\text{mW}$ laser launch budget. |
-| **Fig. 3: 2D Word-Line RC Diffusion** (`plots/flash_rc_transient_comparison.png`) | 101-pillar Centum-Node TDV Voronoi floorplan ($P_{\text{pitch}} = 200\,\mu\text{m}$), 2D spatial voltage contour ($>99.1\%$ uniformity), and transient settling curve ($t_{90} = 2.216\,\text{ns}$, $5,402.6\times$ speedup). |
-| **Fig. 4: 3D Thermal Superhighway** (`plots/flash_3d_thermal_superhighway.png`) | 42,025-element finite-difference conjugate conduction solving baseline stack vs. dual-sided superhighway, clamping peak core temperature to $41.20^\circ\text{C}$ ($+43.80^\circ\text{C}$ safety margin). |
-| **Fig. 5: Dual-Dirac Jitter & Eye** (`plots/timing_jitter_eye_decomposition.png`) | Dual-Dirac horizontal bathtub curves extrapolated to $\text{BER} = 10^{-15}$ ($TJ = 0.946\,\text{ps}$ at $200\,\text{GHz}$), eye opening ratio ($81.1\%\text{ UI}$), and physical layer sign-off matrix. |
-| **Fig. 6: Thermodynamic Benchmark** (`plots/omi_vs_hbm4_power_analysis.png`) | Active dynamic power dissipation vs. JEDEC HBM4 ($98.26\%$ reduction), standby idle leakage ($1,680\times$ reduction), and GPU compute envelope reclamation ($+577.0\,\text{W}$ reclaimed). |
+| **Fig. 1: Top-Level Suite** (`plots/integrated_system_architecture.png`) | End-to-end multi-tier architecture, optical power budget waterfall, dynamic signal pipeline on optical lane 0, first-byte latency waterfall (2.50 ns), and sustained throughput scaling. |
+| **Fig. 2: 1:1024 Binary Tree** (`plots/mmi_1_to_1024_tree_loss.png`) | 10-stage cascaded MMI binary tree loss scaling (31.833 dB total loss, 1.730 dB non-splitting loss), optical carrier delivery (150.0 µW), and 228.8 mW laser launch budget. |
+| **Fig. 3: 2D Word-Line RC Diffusion** (`plots/flash_rc_transient_comparison.png`) | 101-pillar Centum-Node TDV Voronoi floorplan (P_pitch = 200 µm), 2D spatial voltage contour (>99.1\% uniformity), and transient settling curve (t₉0 = 2.216 ns, 5,402.6× speedup). |
+| **Fig. 4: 3D Thermal Superhighway** (`plots/flash_3d_thermal_superhighway.png`) | 42,025-element finite-difference conjugate conduction solving baseline stack vs. dual-sided superhighway, clamping peak core temperature to 41.20^°C (+43.80^°C safety margin). |
+| **Fig. 5: Dual-Dirac Jitter & Eye** (`plots/timing_jitter_eye_decomposition.png`) | Dual-Dirac horizontal bathtub curves extrapolated to BER = 10⁻¹⁵ (TJ = 0.946 ps at 200 GHz), eye opening ratio (81.1\% UI), and physical layer sign-off matrix. |
+| **Fig. 6: Thermodynamic Benchmark** (`plots/omi_vs_hbm4_power_analysis.png`) | Active dynamic power dissipation vs. JEDEC HBM4 (98.26\% reduction), standby idle leakage (1,680× reduction), and GPU compute envelope reclamation (+577.0 W reclaimed). |
 
 ---
 
 ## Physical Layout & Multi-Project Wafer (MPW) Tape-Out Model (GDSII)
 
-To advance OMI from numerical co-simulation (**TRL 4**) to foundry tape-out readiness (**TRL 5/6**), this repository provides the complete, procedural **GDSII physical mask layout** for the **8-waveguide transceiver architecture** implemented on a standard **$2.0\,\text{mm} \times 2.0\,\text{mm}$ ($4.0\,\text{mm}^2$) Multi-Project Wafer (MPW) tile**.
+To advance OMI from numerical co-simulation (**TRL 4**) to foundry tape-out readiness (**TRL 5/6**), this repository provides the complete, procedural **GDSII physical mask layout** for the **8-waveguide transceiver architecture** implemented on a standard **2.0 mm × 2.0 mm (4.0 mm²) Multi-Project Wafer (MPW) tile**.
 
 The layout is parametrically generated via Python using `klayout.db` and is fully compliant with leading silicon photonics foundry design rule manuals (DRMs).
 
@@ -153,37 +153,37 @@ The layout is parametrically generated via Python using `klayout.db` and is full
 
 | Layer / Datatype | Layer Name | Physical Material / Function | Design Rules / Target Dimensions |
 | :---: | :--- | :--- | :--- |
-| **1 / 0** | `WG_CORE` | $\text{Si}_3\text{N}_4$ Waveguide Core | Single-mode $W = 800\,\text{nm}$, $H = 400\,\text{nm}$, $n = 1.996$ |
+| **1 / 0** | `WG_CORE` | Si₃N₄ Waveguide Core | Single-mode W = 800 nm, H = 400 nm, n = 1.996 |
 | **2 / 0** | `WG_SLAB` | Waveguide Slab / Partial Etch | Rib slab, MMI tapers, and facet support transitions |
-| **3 / 0** | `TFLT_CORE` | Thin-Film $\text{LiTaO}_3$ Bonded Film | Pockels electro-optic phase shifters ($300\,\text{nm}$, $r_{33} = 30.5\,\text{pm/V}$) |
-| **4 / 0** | `DTI_ETCH` | Deep Trench Isolation (Air Voids) | Width $= 350\,\text{nm}$, Depth $= 2.0\,\mu\text{m}$, inter-lane isolation $>45\,\text{dB}$ |
-| **5 / 0** | `ACTIVE_PD` | $\text{Ge}$ Absorption & SACM Mesa | $W = 1.2\,\mu\text{m}$, $L = 14.0\,\mu\text{m}$, separate multiplication layer |
-| **6 / 0** | `TDV_VIA` | Through-Die Vias (Copper Pillars) | Diameter $\varnothing = 8.0\,\mu\text{m}$, Centum-Node $200\,\mu\text{m}$ pitch grid |
-| **7 / 0** | `TDV_PAD` | TDV Landing / Capture Pads | $14.0\,\mu\text{m} \times 14.0\,\mu\text{m}$ Cu capture pads with stress relief |
+| **3 / 0** | `TFLT_CORE` | Thin-Film LiTaO₃ Bonded Film | Pockels electro-optic phase shifters (300 nm, r₃₃ = 30.5 pm/V) |
+| **4 / 0** | `DTI_ETCH` | Deep Trench Isolation (Air Voids) | Width = 350 nm, Depth = 2.0 µm, inter-lane isolation >45 dB |
+| **5 / 0** | `ACTIVE_PD` | Ge Absorption & SACM Mesa | W = 1.2 µm, L = 14.0 µm, separate multiplication layer |
+| **6 / 0** | `TDV_VIA` | Through-Die Vias (Copper Pillars) | Diameter ⌀ = 8.0 µm, Centum-Node 200 µm pitch grid |
+| **7 / 0** | `TDV_PAD` | TDV Landing / Capture Pads | 14.0 µm × 14.0 µm Cu capture pads with stress relief |
 | **8 / 0** | `CONTACT` | Silicide Local Contact Vias | Ohmic contacts to photodetector cathode/anode |
-| **9 / 0** | `METAL1` | Metal 1 Interconnect (Local Sense) | CMOS StrongARM latch wiring & bitline routes ($t_{90} = 2.22\,\text{ns}$) |
-| **10 / 0** | `METAL2_RF` | Metal 2 (High-Speed RF CPW & DC) | GSG Modulator electrodes ($W = 6.0\,\mu\text{m}$, $G = 4.5\,\mu\text{m}$, $50\,\Omega$ CPW) |
-| **11 / 0** | `PAD_OPEN` | Passivation Openings | $80\,\mu\text{m} \times 80\,\mu\text{m}$ and $50\,\mu\text{m} \times 50\,\mu\text{m}$ RF/DC probe windows |
+| **9 / 0** | `METAL1` | Metal 1 Interconnect (Local Sense) | CMOS StrongARM latch wiring & bitline routes (t₉0 = 2.22 ns) |
+| **10 / 0** | `METAL2_RF` | Metal 2 (High-Speed RF CPW & DC) | GSG Modulator electrodes (W = 6.0 µm, G = 4.5 µm, 50 Ω CPW) |
+| **11 / 0** | `PAD_OPEN` | Passivation Openings | 80 µm × 80 µm and 50 µm × 50 µm RF/DC probe windows |
 | **12 / 0** | `HEAT_PILLAR`| Copper Thermal Highway Pillars | Direct conjugate conduction interface to top copper heat spreader |
 | **63 / 0** | `TEXT_LABEL`| Micro & Macro Text Annotations | Rasterized 5x7 polygon labels and native GDS text elements |
-| **99 / 0** | `CHIP_BORDER`| Reticle Boundary & Scribe Line | $2000.0\,\mu\text{m} \times 2000.0\,\mu\text{m}$ ($2.0 \times 2.0\,\text{mm}^2$ tile) |
+| **99 / 0** | `CHIP_BORDER`| Reticle Boundary & Scribe Line | 2000.0 µm × 2000.0 µm (2.0 × 2.0 mm² tile) |
 
 ### 8 Integrated Functional Subsystems
 
-1. **West Optical Injection Port**: Spot-size converter (SSC) with adiabatic inverse taper ($180\,\text{nm} \to 800\,\text{nm}$ over $150\,\mu\text{m}$) and fiber alignment groove for external $1550\,\text{nm}$ CW laser delivery. Includes on-chip optical loopback ports for standalone fiber-to-chip coupling calibration.
-2. **1:8 Cascaded MMI Splitter Tree**: 3-stage binary tree of $1 \times 2$ multimode interference splitters ($W_{\text{MMI}} = 6.0\,\mu\text{m}$, $L_{\text{MMI}} = 28.5\,\mu\text{m}$, excess loss $0.14\,\text{dB/stage}$) utilizing cosine S-bends to distribute carrier power equally across 8 optical lanes.
-3. **8-Channel Thin-Film $\text{LiTaO}_3$ Pockels Modulators**: 8 push-pull Mach-Zehnder electro-optic modulators with bonded $300\,\text{nm}$ single-crystal $\text{LiTaO}_3$ ($r_{33} = 30.5\,\text{pm/V}$) and $50\,\Omega$ traveling-wave Coplanar Waveguide (CPW) electrodes routed to wafer-level RF Ground-Signal-Ground (GSG) probe pads for $100\,\text{GHz}$ / $200\,\text{GHz}$ VNA characterization.
-4. **Centum-Node TDV Constellation Interface**: Vertical feedthrough matrix with $8.0\,\mu\text{m}$ circular copper Through-Die Vias, $14.0\,\mu\text{m}$ capture pads, and low-parasitic Metal 1 routes feeding word-line drive voltages directly to the modulator drivers.
-5. **Dense 8-Waveguide Bus with DTI Air-Voids**: 8 single-mode waveguides routed at an ultra-dense $1.5\,\mu\text{m}$ pitch (total bus width $11.3\,\mu\text{m}$), flanked by etched Deep Trench Isolation (DTI) air-void slots ($350\,\text{nm}$) providing $>45\,\text{dB}$ inter-lane optical isolation.
-6. **8-Channel SACM Ge/Si APD Receiver Array**: Waveguide butt-coupled $\text{Ge}$ absorption mesas ($1.2\,\mu\text{m} \times 14.0\,\mu\text{m}$) and silicon multiplication regions feeding directly into CMOS StrongARM regenerative sense amplifiers without analog transimpedance amplifiers.
-7. **East Co-Packaged Optics (CPO) Edge Coupler Array**: 8-channel adiabatic inverse taper edge couplers expanded to standard $127.0\,\mu\text{m}$ pitch, matching commercial MT ferrule ribbon fiber arrays for rack-scale optical fabric reach.
+1. **West Optical Injection Port**: Spot-size converter (SSC) with adiabatic inverse taper (180 nm → 800 nm over 150 µm) and fiber alignment groove for external 1550 nm CW laser delivery. Includes on-chip optical loopback ports for standalone fiber-to-chip coupling calibration.
+2. **1:8 Cascaded MMI Splitter Tree**: 3-stage binary tree of 1 × 2 multimode interference splitters (W_MMI = 6.0 µm, L_MMI = 28.5 µm, excess loss 0.14 dB/stage) utilizing cosine S-bends to distribute carrier power equally across 8 optical lanes.
+3. **8-Channel Thin-Film LiTaO₃ Pockels Modulators**: 8 push-pull Mach-Zehnder electro-optic modulators with bonded 300 nm single-crystal LiTaO₃ (r₃₃ = 30.5 pm/V) and 50 Ω traveling-wave Coplanar Waveguide (CPW) electrodes routed to wafer-level RF Ground-Signal-Ground (GSG) probe pads for 100 GHz / 200 GHz VNA characterization.
+4. **Centum-Node TDV Constellation Interface**: Vertical feedthrough matrix with 8.0 µm circular copper Through-Die Vias, 14.0 µm capture pads, and low-parasitic Metal 1 routes feeding word-line drive voltages directly to the modulator drivers.
+5. **Dense 8-Waveguide Bus with DTI Air-Voids**: 8 single-mode waveguides routed at an ultra-dense 1.5 µm pitch (total bus width 11.3 µm), flanked by etched Deep Trench Isolation (DTI) air-void slots (350 nm) providing >45 dB inter-lane optical isolation.
+6. **8-Channel SACM Ge/Si APD Receiver Array**: Waveguide butt-coupled Ge absorption mesas (1.2 µm × 14.0 µm) and silicon multiplication regions feeding directly into CMOS StrongARM regenerative sense amplifiers without analog transimpedance amplifiers.
+7. **East Co-Packaged Optics (CPO) Edge Coupler Array**: 8-channel adiabatic inverse taper edge couplers expanded to standard 127.0 µm pitch, matching commercial MT ferrule ribbon fiber arrays for rack-scale optical fabric reach.
 8. **South Reticle Diagnostic & PDK Test Structures**: Comprehensive process development modules including:
-   - **Test 1**: Standalone $1 \times 2$ MMI test block with dual loopback ports.
-   - **Test 2**: Standalone $\text{LiTaO}_3$ phase modulator with dedicated GSG probe pads for $V_\pi \cdot L$ and $S_{21}$ RF bandwidth testing.
-   - **Test 3**: Concentric cutback waveguide loss spiral ($L = 2.50\,\text{cm}$ optical path length) for precision propagation loss extraction.
-   - **Test 4**: 10-via TDV daisy chain with 4-wire Kelvin probe pads ($I+, I-, V+, V-$) measuring sub-$15\,\text{m}\Omega$ contact resistance.
+   - **Test 1**: Standalone 1 × 2 MMI test block with dual loopback ports.
+   - **Test 2**: Standalone LiTaO₃ phase modulator with dedicated GSG probe pads for V_π · L and S₂₁ RF bandwidth testing.
+   - **Test 3**: Concentric cutback waveguide loss spiral (L = 2.50 cm optical path length) for precision propagation loss extraction.
+   - **Test 4**: 10-via TDV daisy chain with 4-wire Kelvin probe pads (I+, I-, V+, V-) measuring sub-15 mΩ contact resistance.
    - **Test 5**: DTI optical crosstalk test pair comparing parallel waveguides with and without air-void trenches.
-   - **Test 6**: Dual-axis lithographic Vernier overlay calipers ($10\,\text{nm}$ resolution) and sub-micron resolution comb targets ($200\,\text{nm}$ to $1000\,\text{nm}$).
+   - **Test 6**: Dual-axis lithographic Vernier overlay calipers (10 nm resolution) and sub-micron resolution comb targets (200 nm to 1000 nm).
 
 ---
 
@@ -192,13 +192,13 @@ The layout is parametrically generated via Python using `klayout.db` and is full
 This repository contains the complete publication-grade manuscript suite:
 
 1. **IEEE Transactions Manuscript** ([`manuscript/IEEE_TRANSACTIONS_OMI_MANUSCRIPT.pdf`](manuscript/IEEE_TRANSACTIONS_OMI_MANUSCRIPT.pdf)):
-   - **15 Pages**, formatted strictly according to `IEEEtran` guidelines with zero running headers (`\markboth{}{}%`).
+   - **15 Pages**, formatted strictly according to `IEEEtran` guidelines with zero running headers (running headers disabled).
    - Contains **102 first-principles equations** across 8 mathematical appendices (Appendices A--H).
    - Includes 5 vector-rendered TikZ architectural schematics.
 
 2. **Multi-Physics Simulation Report & Benchmarks** ([`manuscript/OMI_SIMULATION_REPORT_AND_BENCHMARKS.pdf`](manuscript/OMI_SIMULATION_REPORT_AND_BENCHMARKS.pdf)):
    - **11 Pages**, concise, balanced, publication-grade empirical reference manual.
-   - Houses the 7 core physical simulation dashboards and foundry tape-out datasheets enlarged to two-column width (`0.88\textwidth`), paired with in-depth analytical text, governing formulas, itemized power breakdown (Table I & Table II), master 19-point sign-off verification matrix (Table III), system-level LLaMA-3 70B inference profiling (Table IV), and 14-layer MPW physical mask layout map (Table V).
+   - Houses the 7 core physical simulation dashboards and foundry tape-out datasheets enlarged to two-column width (two-column width), paired with in-depth analytical text, governing formulas, itemized power breakdown (Table I & Table II), master 19-point sign-off verification matrix (Table III), system-level LLaMA-3 70B inference profiling (Table IV), and 14-layer MPW physical mask layout map (Table V).
 
 ---
 
