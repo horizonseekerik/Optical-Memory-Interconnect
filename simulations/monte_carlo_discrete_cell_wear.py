@@ -276,7 +276,7 @@ def run_discrete_monte_carlo_to_exhaustion(num_physical_cells=75_600_000, num_mi
         "total_terabytes_written_tbw": float(tbw_terabytes),
         "total_petabytes_written_pbw": float(tbw_petabytes),
         "elapsed_seconds": float(elapsed),
-        "plot_path": plot_path
+        "plot_path": os.path.relpath(plot_path, os.path.dirname(__file__)).replace("\\", "/")
     }
     
     json_path = os.path.join(os.path.dirname(__file__), "monte_carlo_discrete_results.json")

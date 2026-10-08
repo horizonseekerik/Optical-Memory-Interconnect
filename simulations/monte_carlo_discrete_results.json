@@ -11,5 +11,5 @@
   "total_terabytes_written_tbw": 256560.0,
   "total_petabytes_written_pbw": 256.56,
   "elapsed_seconds": 2.643707275390625,
-  "plot_path": "C:\\Users\\hp\\Desktop\\Optical interconnect\\plots\\monte_carlo_discrete_cell_wear.png"
+  "plot_path": "../plots/monte_carlo_discrete_cell_wear.png"
 }

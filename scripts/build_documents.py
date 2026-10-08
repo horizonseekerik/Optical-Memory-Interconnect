@@ -23,12 +23,17 @@ def find_tool(name):
     p = shutil.which(name)
     if p:
         return p
-    miktex_paths = [
+    # Cross-platform search paths if not on system PATH
+    potential_paths = [
         os.path.expandvars(r"%LOCALAPPDATA%\Programs\MiKTeX\miktex\bin\x64"),
-        r"C:\Program Files\MiKTeX\miktex\bin\x64"
+        os.path.join(os.environ.get("ProgramFiles", r"C:\Program Files"), r"MiKTeX\miktex\bin\x64"),
+        os.path.join(os.environ.get("ProgramFiles(x86)", r"C:\Program Files (x86)"), r"MiKTeX\miktex\bin\x64"),
+        "/usr/bin",
+        "/usr/local/bin",
+        "/Library/TeX/texbin"
     ]
-    for mp in miktex_paths:
-        candidate = os.path.join(mp, name if name.endswith(".exe") else f"{name}.exe")
+    for mp in potential_paths:
+        candidate = os.path.join(mp, name if (os.name != "nt" or name.endswith(".exe")) else f"{name}.exe")
         if os.path.exists(candidate):
             return candidate
     return name

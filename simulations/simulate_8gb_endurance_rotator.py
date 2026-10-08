@@ -296,7 +296,7 @@ def run_8gb_simulation():
         "level4_full_omi_concatenated_endurance_overwrites": float(full_omi_endurance_omi),
         "total_terabytes_written_tbw": float(tbw_terabytes),
         "total_petabytes_written_pbw": float(tbw_petabytes),
-        "plot_path": out_plot,
+        "plot_path": os.path.relpath(out_plot, os.path.dirname(__file__)).replace("\\", "/"),
         "elapsed_seconds": time.time() - start_time
     }
     

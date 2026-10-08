@@ -14,6 +14,6 @@
   "level4_full_omi_concatenated_endurance_overwrites": 802766.9073494711,
   "total_terabytes_written_tbw": 6422.135258795769,
   "total_petabytes_written_pbw": 6.422135258795769,
-  "plot_path": "C:\\Users\\hp\\Desktop\\Optical interconnect\\plots\\omi_8gb_endurance_wear_rotator.png",
-  "elapsed_seconds": 2.200770616531372
+  "plot_path": "../plots/omi_8gb_endurance_wear_rotator.png",
+  "elapsed_seconds": 2.907644033432007
 }
